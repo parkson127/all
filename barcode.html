@@ -27,7 +27,11 @@
             padding: 16px 16px 24px;
             -webkit-font-smoothing: antialiased;
         }
-
+        .staff-label {
+            color: #E30613 !important;   /* Warna merah sepadan dengan header */
+            font-size: 14px !important;  /* Saiz font lebih besar (default ~11px) */
+            font-weight: 700 !important; /* Lebih tebal untuk menonjol */
+        }
         .app-header {
             display: flex;
             justify-content: space-between;
@@ -696,7 +700,7 @@
             <div class="staff-section">
                 <div class="staff-row">
                     <div class="field">
-                        <label>Staff ID (17 digits)</label>
+                        <label class="staff-label">Staff ID (17 digits)</label>
                         <input id="staffId" maxlength="17" inputmode="numeric" placeholder="Staff ID">
                     </div>
                     <div class="staff-barcode-wrapper" id="staffBarcodeWrapper" onclick="toggleZoom('staffBarcode')">
