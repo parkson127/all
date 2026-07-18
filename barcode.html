@@ -1,16 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ms">
 <head>
-    <meta charset="UTF-8">
-    <title>Auto POS Barcode System • Premium</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
-    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Parkson</title>
     <style>
+        /* ===== RESET & BASE ===== */
         * {
             margin: 0;
             padding: 0;
@@ -18,1005 +13,546 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: #f2f2f7;
-            color: #1c1c1e;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f0f2f5;
+            color: #1a1a2e;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            padding: 16px 16px 24px;
-            -webkit-font-smoothing: antialiased;
+            padding: 40px 24px;
         }
-        .staff-label {
-            color: #E30613 !important;   /* Warna merah sepadan dengan header */
-            font-size: 17px !important;  /* Saiz font lebih besar (default ~11px) */
-            font-weight: 1000 !important; /* Lebih tebal untuk menonjol */
-        }
-        .app-header {
+
+        /* ===== HEADER ===== */
+        .dashboard-header {
+            max-width: 1200px;
+            margin: 0 auto 32px;
+            width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 4px 16px;
-            border-bottom: 0.5px solid rgba(60, 60, 67, 0.08);
-            margin-bottom: 16px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e8ecf0;
         }
 
-        .app-header h1 {
-            font-size: 22px;
-            font-weight: 700;
-            letter-spacing: -0.3px;
-            background: linear-gradient(135deg, #E30613, #b30510);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .app-header .badge {
-            font-size: 11px;
-            font-weight: 600;
-            color: #8e8e93;
-            background: rgba(60, 60, 67, 0.06);
-            padding: 4px 14px;
-            border-radius: 20px;
-            letter-spacing: 0.3px;
-        }
-
-        .input-section {
-            background: #ffffff;
-            border-radius: 20px;
-            padding: 20px 18px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
-            border: 0.5px solid rgba(60, 60, 67, 0.06);
-            margin-bottom: 16px;
-        }
-
-        .input-row {
+        .header-left {
             display: flex;
-            gap: 10px;
-            margin-bottom: 12px;
+            align-items: center;
+            gap: 16px;
         }
 
-        .input-row .field {
-            flex: 1;
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: #1a1a2e;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s;
+            text-decoration: none;
         }
 
-        .input-row .field.small {
-            flex: 0.6;
+        .logo-icon:hover {
+            transform: scale(1.05);
         }
 
-        .input-row .field.large {
-            flex: 1.4;
+        .header-title h1 {
+            font-size: 26px;
+            font-weight: 700;
+            color: #1a1a2e;
+            letter-spacing: -0.5px;
         }
 
-        .field label {
-            display: block;
-            font-size: 11px;
+        .header-title p {
+            font-size: 14px;
+            color: #6c757d;
+            margin-top: 2px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-badge {
+            background: #e8ecf0;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
             font-weight: 600;
-            color: #8e8e93;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
+            color: #1a1a2e;
         }
 
-        .field input {
-            width: 100%;
-            padding: 14px 14px;
-            border-radius: 14px;
-            border: 1.5px solid #e5e5ea;
-            font-size: 16px;
-            font-weight: 500;
-            font-family: inherit;
-            background: #f8f8fc;
-            color: #1c1c1e;
-            transition: all 0.2s;
-            -webkit-appearance: none;
+        .header-badge span {
+            color: #007aff;
         }
 
-        .field input:focus {
-            outline: none;
-            border-color: #E30613;
-            background: #ffffff;
-            box-shadow: 0 0 0 4px rgba(227, 6, 19, 0.08);
-        }
-
-        .field input::placeholder {
-            color: #aeaeb2;
-            font-weight: 400;
-        }
-
-        .generate-btn {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #E30613, #b30510);
+        /* ===== HOME BUTTON ===== */
+        .home-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #1a1a2e;
             color: white;
             border: none;
-            border-radius: 16px;
-            font-size: 17px;
-            font-weight: 600;
-            cursor: pointer;
-            font-family: inherit;
-            transition: all 0.2s;
-            box-shadow: 0 4px 16px rgba(227, 6, 19, 0.25);
-            letter-spacing: 0.3px;
-            margin-top: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .generate-btn:active {
-            transform: scale(0.97);
-            box-shadow: 0 2px 8px rgba(227, 6, 19, 0.15);
-        }
-
-        .output-section {
-            flex: 1;
-            background: #ffffff;
+            padding: 8px 16px;
             border-radius: 20px;
-            padding: 20px 18px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
-            border: 0.5px solid rgba(60, 60, 67, 0.06);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .output-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-
-        .output-header h2 {
-            font-size: 15px;
-            font-weight: 600;
-            color: #1c1c1e;
-        }
-
-        .output-header .badge-code {
-            font-size: 12px;
-            font-weight: 500;
-            color: #8e8e93;
-            background: #f2f2f7;
-            padding: 4px 12px;
-            border-radius: 12px;
-        }
-
-        .barcode-display {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
-            background: #ffffff;
-            border-radius: 16px;
-            border: 1px solid #e5e5ea;
-            min-height: 280px;
-            transition: all 0.3s;
-            position: relative;
-        }
-
-        /* ===== BARCODE WRAPPER ===== */
-        .barcode-wrapper {
-            width: 100%;
-            max-width: 400px;
-            cursor: pointer;
-            touch-action: manipulation;
-            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.3s;
-            border-radius: 12px;
-            background: #ffffff;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-        }
-
-        .barcode-wrapper.zoomed {
-            transform: scale(1.6);
-            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.18);
-            z-index: 50;
-            position: relative;
-        }
-
-        #barcode {
-            width: 100%;
-            height: auto;
-            display: block;
-            padding: 16px;
-            background: #ffffff;
-            border-radius: 12px;
-        }
-
-        /* ===== QR CODE WRAPPER ===== */
-        .qr-wrapper {
-            margin-top: 16px;
-            cursor: pointer;
-            touch-action: manipulation;
-            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.3s;
-            border-radius: 12px;
-            background: #ffffff;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-            display: inline-block;
-            padding: 16px;
-        }
-
-        .qr-wrapper.zoomed {
-            transform: scale(1.6);
-            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.18);
-            z-index: 50;
-            position: relative;
-        }
-
-        #qrcode {
-            display: block;
-        }
-
-        #qrcode canvas {
-            width: 180px !important;
-            height: 180px !important;
-            border-radius: 6px;
-            background: #ffffff !important;
-            display: block;
-        }
-
-        /* ===== STAFF BARCODE WRAPPER ===== */
-        .staff-section {
-            margin-top: 16px;
-            padding-top: 16px;
-            border-top: 0.5px solid rgba(60, 60, 67, 0.08);
-            width: 100%;
-        }
-
-        .staff-section .staff-row {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-
-        .staff-section .staff-row .field {
-            flex: 1;
-        }
-
-        .staff-section .staff-row .field label {
-            font-size: 11px;
-            font-weight: 600;
-            color: #8e8e93;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
-            display: block;
-        }
-
-        .staff-section .staff-row .field input {
-            width: 100%;
-            padding: 12px 14px;
-            border-radius: 14px;
-            border: 1.5px solid #e5e5ea;
-            font-size: 15px;
-            font-weight: 500;
-            font-family: inherit;
-            background: #f8f8fc;
-            color: #1c1c1e;
-            transition: all 0.2s;
-            -webkit-appearance: none;
-        }
-
-        .staff-section .staff-row .field input:focus {
-            outline: none;
-            border-color: #E30613;
-            background: #ffffff;
-            box-shadow: 0 0 0 4px rgba(227, 6, 19, 0.08);
-        }
-
-        .staff-barcode-wrapper {
-            max-width: 220px;
-            width: 100%;
-            cursor: pointer;
-            touch-action: manipulation;
-            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.3s;
-            border-radius: 12px;
-            background: #ffffff;
-            border: 1px solid #e5e5ea;
-            flex-shrink: 0;
-        }
-
-        .staff-barcode-wrapper.zoomed {
-            transform: scale(1.6);
-            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.18);
-            z-index: 50;
-            position: relative;
-        }
-
-        #staffBarcode {
-            width: 100%;
-            height: auto;
-            display: block;
-            padding: 10px;
-            background: #ffffff;
-            border-radius: 12px;
-        }
-
-        /* ===== ZOOM HINT ===== */
-        .zoom-hint {
-            text-align: center;
-            font-size: 11px;
-            color: #8e8e93;
-            margin-top: 8px;
-            letter-spacing: 0.2px;
-        }
-
-        .zoom-hint span {
-            background: #f2f2f7;
-            padding: 3px 14px;
-            border-radius: 14px;
-            display: inline-block;
-        }
-
-        .history-section {
-            margin-top: 16px;
-            padding-top: 16px;
-            border-top: 0.5px solid rgba(60, 60, 67, 0.08);
-        }
-
-        .history-section .history-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .history-section .history-header h4 {
             font-size: 13px;
             font-weight: 600;
-            color: #8e8e93;
-        }
-
-        .history-section .history-header .clear-btn {
-            font-size: 12px;
-            color: #E30613;
-            background: none;
-            border: none;
-            font-weight: 600;
             cursor: pointer;
             font-family: inherit;
-        }
-
-        .history-list {
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            padding: 4px 0 8px;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-        }
-
-        .history-list::-webkit-scrollbar {
-            display: none;
-        }
-
-        .history-item {
-            background: #f2f2f7;
-            padding: 8px 14px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 500;
-            color: #1c1c1e;
-            white-space: nowrap;
-            cursor: pointer;
             transition: all 0.2s;
-            border: 0.5px solid rgba(60, 60, 67, 0.04);
-            flex-shrink: 0;
+            text-decoration: none;
         }
 
-        .history-item:active {
-            transform: scale(0.95);
-            background: #e5e5ea;
+        .home-btn:hover {
+            background: #2d2d4e;
+            transform: scale(1.02);
         }
 
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%) translateY(20px);
-            background: rgba(28, 28, 30, 0.92);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            color: #fff;
-            padding: 12px 24px;
-            border-radius: 16px;
-            font-size: 14px;
+        /* ===== GRID 9 KOTAK ===== */
+        .grid-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            flex: 1;
+        }
+
+        /* ===== KOTAK (CARD) ===== */
+        .grid-item {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 32px 24px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            border: 1px solid #e8ecf0;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            min-height: 200px;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .grid-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.10);
+            border-color: #1a1a2e;
+            z-index: 10;
+        }
+
+        .grid-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #1a1a2e;
+            border-radius: 20px 20px 0 0;
+            transition: height 0.3s;
+        }
+
+        .grid-item:hover::before {
+            height: 6px;
+        }
+
+        .grid-item:nth-child(1)::before { background: #007aff; }
+        .grid-item:nth-child(2)::before { background: #34c759; }
+        .grid-item:nth-child(3)::before { background: #ff9500; }
+        .grid-item:nth-child(4)::before { background: #af52de; }
+        .grid-item:nth-child(5)::before { background: #ff2d55; }
+        .grid-item:nth-child(6)::before { background: #5ac8fa; }
+        .grid-item:nth-child(7)::before { background: #ff6b6b; }
+        .grid-item:nth-child(8)::before { background: #5856d6; }
+        .grid-item:nth-child(9)::before { background: #34c759; }
+
+        .grid-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+            transition: transform 0.3s;
+        }
+
+        .grid-item:hover .grid-icon {
+            transform: scale(1.1) rotate(-4deg);
+        }
+
+        .grid-item h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 4px;
+        }
+
+        .grid-item p {
+            font-size: 13px;
+            color: #6c757d;
+            margin: 0;
+        }
+
+        .grid-item .badge {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 3px 14px;
+            background: #f0f2f5;
+            border-radius: 12px;
+            font-size: 11px;
             font-weight: 500;
-            opacity: 0;
-            transition: all 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
-            pointer-events: none;
-            z-index: 999;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            color: #6c757d;
+            transition: all 0.3s;
         }
 
-        .toast.show {
+        .grid-item:hover .badge {
+            background: #1a1a2e;
+            color: white;
+        }
+
+        .grid-arrow {
+            position: absolute;
+            bottom: 16px;
+            right: 20px;
+            font-size: 18px;
+            color: #d0d4d8;
+            transition: all 0.3s;
+            opacity: 0;
+            transform: translateX(-8px);
+        }
+
+        .grid-item:hover .grid-arrow {
             opacity: 1;
-            transform: translateX(-50%) translateY(0);
+            transform: translateX(0);
+            color: #1a1a2e;
+        }
+
+        /* ===== FOOTER ===== */
+        .dashboard-footer {
+            max-width: 1200px;
+            margin: 40px auto 0;
+            width: 100%;
+            padding-top: 20px;
+            border-top: 1px solid #e8ecf0;
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: #6c757d;
+        }
+
+        .dashboard-footer a {
+            color: #1a1a2e;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .dashboard-footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .grid-container {
+                gap: 18px;
+            }
+            .grid-item {
+                min-height: 170px;
+                padding: 24px 18px;
+            }
+            .grid-icon {
+                font-size: 40px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 16px;
+            }
+
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+                padding-bottom: 16px;
+            }
+
+            .header-right {
+                width: 100%;
+                justify-content: flex-start;
+                flex-wrap: wrap;
+            }
+
+            .grid-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 14px;
+            }
+
+            .grid-item {
+                min-height: 150px;
+                padding: 20px 14px;
+            }
+
+            .grid-icon {
+                font-size: 34px;
+            }
+            .grid-item h3 {
+                font-size: 15px;
+            }
+            .grid-item p {
+                font-size: 12px;
+            }
+
+            .dashboard-footer {
+                flex-direction: column;
+                gap: 6px;
+                text-align: center;
+            }
+
+            .home-btn {
+                font-size: 12px;
+                padding: 6px 14px;
+            }
         }
 
         @media (max-width: 480px) {
-            body {
-                padding: 12px 12px 16px;
-            }
-            .app-header h1 {
-                font-size: 19px;
-            }
-            .input-section {
-                padding: 16px 14px;
-            }
-            .input-row {
-                flex-direction: column;
-                gap: 8px;
-            }
-            .input-row .field.small,
-            .input-row .field.large {
-                flex: 1;
-            }
-            .field input {
-                padding: 16px 14px;
-                font-size: 17px;
-            }
-            .generate-btn {
-                padding: 18px;
-                font-size: 17px;
-            }
-            .output-section {
-                padding: 16px 14px;
-            }
-            .barcode-wrapper {
-                max-width: 300px;
-            }
-            .barcode-wrapper.zoomed {
-                transform: scale(1.4);
-            }
-            .qr-wrapper {
-                padding: 12px;
-            }
-            .qr-wrapper.zoomed {
-                transform: scale(1.4);
-            }
-            #qrcode canvas {
-                width: 150px !important;
-                height: 150px !important;
-            }
-            .staff-barcode-wrapper.zoomed {
-                transform: scale(1.4);
-            }
-            .staff-section .staff-row {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .staff-barcode-wrapper {
-                max-width: 100%;
-                margin-top: 6px;
-            }
-            .history-item {
-                font-size: 11px;
-                padding: 6px 12px;
-            }
-            .zoom-hint {
-                font-size: 10px;
-            }
-        }
-
-        @media (min-width: 481px) and (max-width: 768px) {
-            .input-row {
+            .grid-container {
+                grid-template-columns: 1fr 1fr;
                 gap: 12px;
             }
-            .input-row .field.small {
-                flex: 0.5;
+            .grid-item {
+                min-height: 130px;
+                padding: 16px 12px;
             }
-            .input-row .field.large {
-                flex: 1;
+            .grid-icon {
+                font-size: 28px;
+                margin-bottom: 6px;
             }
-            .barcode-wrapper {
-                max-width: 340px;
+            .grid-item h3 {
+                font-size: 13px;
             }
-            .barcode-wrapper.zoomed {
-                transform: scale(1.5);
+            .grid-item p {
+                font-size: 11px;
             }
-            .qr-wrapper.zoomed {
-                transform: scale(1.5);
+            .grid-item .badge {
+                font-size: 9px;
+                padding: 2px 10px;
+                margin-top: 6px;
             }
-            .staff-barcode-wrapper.zoomed {
-                transform: scale(1.5);
+            .grid-arrow {
+                display: none;
             }
-        }
-
-        @media (min-width: 769px) {
-            body {
-                max-width: 520px;
-                margin: 0 auto;
-                padding: 20px 20px 30px;
-                background: #f2f2f7;
-            }
-            .barcode-wrapper.zoomed {
-                transform: scale(1.8);
-            }
-            .qr-wrapper.zoomed {
-                transform: scale(1.8);
-            }
-            .staff-barcode-wrapper.zoomed {
-                transform: scale(1.8);
+            .header-title h1 {
+                font-size: 20px;
             }
         }
 
+        /* ===== DARK MODE ===== */
         @media (prefers-color-scheme: dark) {
             body {
-                background: #000000;
-                color: #f5f5f7;
+                background: #0d0d1a;
             }
-            .app-header {
-                border-bottom-color: rgba(255, 255, 255, 0.06);
+
+            .dashboard-header {
+                border-bottom-color: #2a2a3e;
             }
-            .app-header h1 {
-                background: linear-gradient(135deg, #ff2d55, #cc1f42);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
+
+            .header-title h1 {
+                color: #f0f0f5;
             }
-            .app-header .badge {
-                color: #8e8e93;
-                background: rgba(255, 255, 255, 0.06);
-            }
-            .input-section,
-            .output-section {
-                background: #1c1c1e;
-                border-color: rgba(255, 255, 255, 0.06);
-            }
-            .field input {
-                background: #2c2c2e;
-                border-color: #3a3a3c;
-                color: #f5f5f7;
-            }
-            .field input:focus {
-                border-color: #ff2d55;
-                background: #1c1c1e;
-                box-shadow: 0 0 0 4px rgba(255, 45, 85, 0.12);
-            }
-            .field label {
+
+            .header-title p {
                 color: #8e8e93;
             }
-            .generate-btn {
-                background: linear-gradient(135deg, #ff2d55, #cc1f42);
-                box-shadow: 0 4px 16px rgba(255, 45, 85, 0.25);
+
+            .header-badge {
+                background: #2a2a3e;
+                color: #f0f0f5;
             }
-            .output-header h2 {
-                color: #f5f5f7;
+
+            .grid-item {
+                background: #14142a;
+                border-color: #2a2a3e;
             }
-            .output-header .badge-code {
-                background: #2c2c2e;
+
+            .grid-item:hover {
+                border-color: #5a5a7a;
+                box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+            }
+
+            .grid-item h3 {
+                color: #f0f0f5;
+            }
+
+            .grid-item p {
                 color: #8e8e93;
             }
-            .barcode-display {
-                background: #ffffff;
-                border-color: #3a3a3c;
-            }
-            .barcode-wrapper {
-                background: #ffffff;
-            }
-            #barcode {
-                background: #ffffff;
-            }
-            .qr-wrapper {
-                background: #ffffff;
-            }
-            #qrcode canvas {
-                background: #ffffff !important;
-            }
-            .staff-barcode-wrapper {
-                background: #ffffff;
-                border-color: #3a3a3c;
-            }
-            #staffBarcode {
-                background: #ffffff;
-            }
-            .staff-section {
-                border-top-color: rgba(255, 255, 255, 0.06);
-            }
-            .staff-section .staff-row .field input {
-                background: #2c2c2e;
-                border-color: #3a3a3c;
-                color: #f5f5f7;
-            }
-            .staff-section .staff-row .field input:focus {
-                border-color: #ff2d55;
-                background: #1c1c1e;
-                box-shadow: 0 0 0 4px rgba(255, 45, 85, 0.12);
-            }
-            .history-section {
-                border-top-color: rgba(255, 255, 255, 0.06);
-            }
-            .history-item {
-                background: #2c2c2e;
-                color: #f5f5f7;
-                border-color: rgba(255, 255, 255, 0.04);
-            }
-            .history-item:active {
-                background: #3a3a3c;
-            }
-            .toast {
-                background: rgba(44, 44, 46, 0.95);
-                color: #f5f5f7;
-            }
-            .history-section .history-header .clear-btn {
-                color: #ff2d55;
-            }
-            .zoom-hint span {
-                background: #2c2c2e;
+
+            .grid-item .badge {
+                background: #2a2a3e;
                 color: #8e8e93;
+            }
+
+            .grid-item:hover .badge {
+                background: #f0f0f5;
+                color: #1a1a2e;
+            }
+
+            .grid-arrow {
+                color: #3a3a5a;
+            }
+
+            .grid-item:hover .grid-arrow {
+                color: #a0a0b8;
+            }
+
+            .dashboard-footer {
+                border-top-color: #2a2a3e;
+                color: #8e8e93;
+            }
+
+            .dashboard-footer a {
+                color: #a0a0b8;
+            }
+
+            .dashboard-footer a:hover {
+                color: #f0f0f5;
+            }
+
+            .home-btn {
+                background: #2a2a3e;
+                color: #f0f0f5;
+            }
+
+            .home-btn:hover {
+                background: #3a3a5a;
             }
         }
     </style>
 </head>
 <body>
 
-    <header class="app-header">
-        <h1>✦ POS Barcode</h1>
-        <span class="badge">v2.0 • Premium</span>
+    <!-- ===== HEADER ===== -->
+    <header class="dashboard-header">
+        <div class="header-left">
+            <a href="https://parkson127.github.io/all/" class="logo-icon">C</a>
+            <div class="header-title">
+                <h1>Corporate Hub</h1>
+                <p>Access your tools and applications</p>
+            </div>
+        </div>
+        <div class="header-right">
+            <a href="https://parkson127.github.io/all/" class="home-btn">
+                🏠 Home
+            </a>
+            <span class="header-badge">📊 <span>9</span> Applications</span>
+        </div>
     </header>
 
-    <section class="input-section">
-        <div class="input-row">
-            <div class="field small">
-                <label>Store</label>
-                <input id="store" value="127" maxlength="3" inputmode="numeric" placeholder="Store">
-            </div>
-            <div class="field small">
-                <label>POS</label>
-                <input id="pos" maxlength="3" inputmode="numeric" placeholder="POS">
-            </div>
-            <div class="field large">
-                <label>Receipt</label>
-                <input id="receipt" inputmode="numeric" maxlength="9" placeholder="Receipt number" autofocus>
-            </div>
-        </div>
-        <button class="generate-btn" id="generateBtn">
-            <span>⚡</span> Generate Barcode
-        </button>
-    </section>
+    <!-- ===== GRID 9 KOTAK ===== -->
+    <div class="grid-container">
 
-    <section class="output-section">
-        <div class="output-header">
-            <h2>📤 Output</h2>
-            <span class="badge-code" id="codeDisplay">—</span>
-        </div>
+        <!-- 1. BARCODE -->
+        <a href="https://parkson127.github.io/all/barcode.html" class="grid-item">
+            <span class="grid-icon">📱</span>
+            <h3>Barcode System</h3>
+            <p>Auto POS barcode generator</p>
+            <span class="badge">Scanner</span>
+            <span class="grid-arrow">→</span>
+        </a>
 
-        <div class="barcode-display" id="barcodeDisplay">
+        <!-- 2. RANKING -->
+        <a href="https://parkson127.github.io/all/ranking.html" class="grid-item">
+            <span class="grid-icon">📊</span>
+            <h3>Ranking Analytics</h3>
+            <p>Performance &amp; leaderboard</p>
+            <span class="badge">Analytics</span>
+            <span class="grid-arrow">→</span>
+        </a>
 
-            <!-- ===== BARCODE WRAPPER ===== -->
-            <div class="barcode-wrapper" id="barcodeWrapper" onclick="toggleZoom('barcode')">
-                <svg id="barcode"></svg>
-            </div>
+        <!-- 3. STOCKTAKE -->
+        <a href="https://parkson127.github.io/all/stocktake.html" class="grid-item">
+            <span class="grid-icon">📦</span>
+            <h3>Stocktake System</h3>
+            <p>Inventory management</p>
+            <span class="badge">Inventory</span>
+            <span class="grid-arrow">→</span>
+        </a>
 
-            <!-- ===== QR CODE WRAPPER ===== -->
-            <div class="qr-wrapper" id="qrWrapper" onclick="toggleZoom('qrcode')">
-                <div id="qrcode"></div>
-            </div>
+        <!-- 4. SALES DASHBOARD -->
+        <a href="https://parkson127.github.io/all/sales.html" class="grid-item">
+            <span class="grid-icon">💰</span>
+            <h3>Sales Dashboard</h3>
+            <p>Real-time sales analytics</p>
+            <span class="badge">Finance</span>
+            <span class="grid-arrow">→</span>
+        </a>
 
-            <!-- ===== STAFF BARCODE ===== -->
-            <div class="staff-section">
-                <div class="staff-row">
-                    <div class="field">
-                        <label class="staff-label">Staff ID (17 digits)</label>
-                        <input id="staffId" maxlength="17" inputmode="numeric" placeholder="Staff ID">
-                    </div>
-                    <div class="staff-barcode-wrapper" id="staffBarcodeWrapper" onclick="toggleZoom('staffBarcode')">
-                        <svg id="staffBarcode"></svg>
-                    </div>
-                </div>
-            </div>
+        <!-- 5. CUSTOMER CRM -->
+        <a href="https://parkson127.github.io/all/crm.html" class="grid-item">
+            <span class="grid-icon">👥</span>
+            <h3>Customer CRM</h3>
+            <p>Manage customer relations</p>
+            <span class="badge">CRM</span>
+            <span class="grid-arrow">→</span>
+        </a>
 
-            <p class="zoom-hint"><span>👆 Tap to zoom • Tap again to reset</span></p>
-        </div>
+        <!-- 6. HR PORTAL -->
+        <a href="https://parkson127.github.io/all/hr.html" class="grid-item">
+            <span class="grid-icon">👤</span>
+            <h3>HR Portal</h3>
+            <p>Employee management</p>
+            <span class="badge">HR</span>
+            <span class="grid-arrow">→</span>
+        </a>
 
-        <div class="history-section">
-            <div class="history-header">
-                <h4>📜 Recent</h4>
-                <button class="clear-btn" onclick="clearHistory()">Clear</button>
-            </div>
-            <div class="history-list" id="historyList"></div>
-        </div>
-    </section>
+        <!-- 7. PROJECT TRACKER -->
+        <a href="https://parkson127.github.io/all/projects.html" class="grid-item">
+            <span class="grid-icon">📋</span>
+            <h3>Project Tracker</h3>
+            <p>Task &amp; project monitoring</p>
+            <span class="badge">Management</span>
+            <span class="grid-arrow">→</span>
+        </a>
 
-    <div class="toast" id="toast"></div>
+        <!-- 8. REPORT CENTER -->
+        <a href="https://parkson127.github.io/all/reports.html" class="grid-item">
+            <span class="grid-icon">📄</span>
+            <h3>Report Center</h3>
+            <p>Generate &amp; export reports</p>
+            <span class="badge">Reports</span>
+            <span class="grid-arrow">→</span>
+        </a>
 
-    <script>
-        // ===== VARIABLES =====
-        let lastPreview = "";
-        let lastFinal = "";
-        let zoomState = {
-            barcode: false,
-            qrcode: false,
-            staffBarcode: false
-        };
+        <!-- 9. SETTINGS -->
+        <a href="https://parkson127.github.io/all/settings.html" class="grid-item">
+            <span class="grid-icon">⚙️</span>
+            <h3>Settings</h3>
+            <p>System configuration</p>
+            <span class="badge">System</span>
+            <span class="grid-arrow">→</span>
+        </a>
 
-        // ===== DOM REFS =====
-        const barcodeWrapper = document.getElementById('barcodeWrapper');
-        const qrWrapper = document.getElementById('qrWrapper');
-        const staffBarcodeWrapper = document.getElementById('staffBarcodeWrapper');
-        const codeDisplay = document.getElementById('codeDisplay');
+    </div>
 
-        // ===== TOAST =====
-        function showToast(msg, duration = 1800) {
-            const t = document.getElementById('toast');
-            t.textContent = msg;
-            t.classList.add('show');
-            clearTimeout(t._hide);
-            t._hide = setTimeout(() => t.classList.remove('show'), duration);
-        }
-
-        // ===== PAD =====
-        function pad(v, l) {
-            return String(v || '').padStart(l, '0');
-        }
-
-        // ===== SAVE SVG AS PNG =====
-        function saveSvgAsPng(svgEl, fileName) {
-            const serializer = new XMLSerializer();
-            const source = serializer.serializeToString(svgEl);
-            const svgBlob = new Blob([source], { type: 'image/svg+xml;charset=utf-8' });
-            const url = URL.createObjectURL(svgBlob);
-
-            const img = new Image();
-            img.onload = function() {
-                const canvas = document.createElement('canvas');
-                canvas.width = img.width;
-                canvas.height = img.height;
-                const ctx = canvas.getContext('2d');
-                ctx.fillStyle = '#ffffff';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                ctx.drawImage(img, 0, 0);
-                URL.revokeObjectURL(url);
-
-                const link = document.createElement('a');
-                link.href = canvas.toDataURL('image/png');
-                link.download = fileName;
-                link.click();
-            };
-            img.src = url;
-        }
-
-        // ===== TOGGLE ZOOM =====
-        function toggleZoom(type) {
-            let wrapper;
-            if (type === 'barcode') {
-                wrapper = barcodeWrapper;
-            } else if (type === 'qrcode') {
-                wrapper = qrWrapper;
-            } else if (type === 'staffBarcode') {
-                wrapper = staffBarcodeWrapper;
-            } else {
-                return;
-            }
-
-            zoomState[type] = !zoomState[type];
-
-            if (zoomState[type]) {
-                wrapper.classList.add('zoomed');
-                setTimeout(() => {
-                    wrapper.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }, 50);
-                showToast(`🔍 ${type} zoomed`, 800);
-            } else {
-                wrapper.classList.remove('zoomed');
-                showToast(`↩️ ${type} reset`, 800);
-            }
-        }
-
-        // ===== GENERATE BARCODE =====
-        function generate() {
-            const store = pad(document.getElementById('store').value, 3);
-            const pos = pad(document.getElementById('pos').value, 3);
-            const receipt = pad(document.getElementById('receipt').value, 9);
-
-            if (!store.trim() || !pos.trim() || !receipt.trim()) {
-                showToast('⚠️ Please fill all fields', 1200);
-                return;
-            }
-
-            const code = `T000${store}-${pos}${receipt}`;
-
-            if (code === lastFinal) return;
-            lastFinal = code;
-            lastPreview = code;
-
-            // Reset zoom
-            Object.keys(zoomState).forEach(key => {
-                zoomState[key] = false;
-                if (key === 'barcode') barcodeWrapper.classList.remove('zoomed');
-                else if (key === 'qrcode') qrWrapper.classList.remove('zoomed');
-                else if (key === 'staffBarcode') staffBarcodeWrapper.classList.remove('zoomed');
-            });
-
-            // ===== RENDER BARCODE =====
-            JsBarcode('#barcode', code, {
-                format: 'CODE128',
-                width: 4,
-                height: 120,
-                displayValue: true,
-                fontSize: 22,
-                textMargin: 8,
-                margin: 12,
-                background: '#ffffff',
-                lineColor: '#000000'
-            });
-
-            // ===== RENDER QR CODE =====
-            const qrContainer = document.getElementById('qrcode');
-            qrContainer.innerHTML = '';
-            new QRCode(qrContainer, {
-                text: code,
-                width: 180,
-                height: 180,
-                colorDark: '#000000',
-                colorLight: '#ffffff'
-            });
-
-            codeDisplay.textContent = code;
-            navigator.clipboard?.writeText(code);
-            saveHistory(code);
-            showToast(`✅ ${code}`, 1200);
-        }
-
-        // ===== PREVIEW =====
-        function preview() {
-            const store = document.getElementById('store').value.trim();
-            const pos = document.getElementById('pos').value.trim();
-            const receipt = document.getElementById('receipt').value.trim();
-
-            if (!store || !pos || !receipt) return;
-
-            const code = `T000${store}-${pos}${receipt}`;
-            if (code === lastPreview) return;
-            lastPreview = code;
-
-            JsBarcode('#barcode', code, {
-                format: 'CODE128',
-                width: 4,
-                height: 120,
-                displayValue: true,
-                fontSize: 22,
-                textMargin: 8,
-                margin: 12,
-                background: '#ffffff',
-                lineColor: '#000000'
-            });
-
-            const qrContainer = document.getElementById('qrcode');
-            qrContainer.innerHTML = '';
-            new QRCode(qrContainer, {
-                text: code,
-                width: 180,
-                height: 180,
-                colorDark: '#000000',
-                colorLight: '#ffffff'
-            });
-
-            codeDisplay.textContent = code;
-        }
-
-        // ===== STAFF BARCODE =====
-        document.getElementById('staffId').addEventListener('input', function() {
-            const id = this.value.replace(/\D/g, '');
-            if (id.length === 17) {
-                JsBarcode('#staffBarcode', id, {
-                    format: 'CODE128',
-                    width: 3,
-                    height: 70,
-                    displayValue: true,
-                    fontSize: 16,
-                    textMargin: 6,
-                    margin: 10,
-                    background: '#ffffff',
-                    lineColor: '#000000'
-                });
-                navigator.clipboard?.writeText(id);
-                showToast('👤 Staff ID copied', 1000);
-                zoomState.staffBarcode = false;
-                staffBarcodeWrapper.classList.remove('zoomed');
-            } else {
-                document.getElementById('staffBarcode').innerHTML = '';
-            }
-        });
-
-        // ===== HISTORY =====
-        function saveHistory(code) {
-            let h = JSON.parse(localStorage.getItem('h') || '[]');
-            h = h.filter(x => x !== code);
-            h.unshift(code);
-            h = h.slice(0, 12);
-            localStorage.setItem('h', JSON.stringify(h));
-            renderHistory();
-        }
-
-        function renderHistory() {
-            const h = JSON.parse(localStorage.getItem('h') || '[]');
-            const list = document.getElementById('historyList');
-            list.innerHTML = '';
-
-            h.forEach(code => {
-                const div = document.createElement('div');
-                div.className = 'history-item';
-                div.textContent = code;
-                div.onclick = () => {
-                    navigator.clipboard.writeText(code);
-                    showToast(`📋 ${code}`, 1000);
-
-                    const clean = code.replace('T000', '');
-                    const parts = clean.split('-');
-                    document.getElementById('store').value = parts[0].slice(0, 3);
-                    document.getElementById('pos').value = parts[1].slice(0, 3);
-                    document.getElementById('receipt').value = parts[1].slice(3);
-
-                    lastPreview = '';
-                    generate();
-                };
-                list.appendChild(div);
-            });
-        }
-
-        function clearHistory() {
-            localStorage.removeItem('h');
-            renderHistory();
-            showToast('🗑️ History cleared', 1000);
-        }
-
-        // ===== INPUT EVENTS =====
-        document.getElementById('receipt').addEventListener('input', function(e) {
-            this.value = this.value.replace(/\D/g, '');
-            preview();
-        });
-
-        document.getElementById('store').addEventListener('input', function(e) {
-            this.value = this.value.replace(/\D/g, '');
-            if (this.value.length >= 3) {
-                document.getElementById('pos').focus();
-            }
-            preview();
-        });
-
-        document.getElementById('pos').addEventListener('input', function(e) {
-            this.value = this.value.replace(/\D/g, '');
-            if (this.value.length >= 3) {
-                document.getElementById('receipt').focus();
-            }
-            preview();
-        });
-
-        document.getElementById('receipt').addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                generate();
-                setTimeout(() => {
-                    this.focus();
-                    this.select();
-                }, 50);
-            }
-        });
-
-        // ===== GENERATE BUTTON =====
-        document.getElementById('generateBtn').addEventListener('click', function(e) {
-            e.preventDefault();
-            generate();
-            setTimeout(() => {
-                document.getElementById('receipt').focus();
-                document.getElementById('receipt').select();
-            }, 100);
-        });
-
-        // ===== INIT =====
-        renderHistory();
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const receipt = document.getElementById('receipt');
-            if (receipt.value.trim().length > 0) {
-                setTimeout(generate, 300);
-            }
-        });
-    </script>
+    <!-- ===== FOOTER ===== -->
+    <footer class="dashboard-footer">
+        <span>© 2026 Corporate Hub • All rights reserved</span>
+        <span>
+            <a href="#">Privacy</a> •
+            <a href="#">Support</a> •
+            <a href="#">Contact</a>
+        </span>
+    </footer>
 
 </body>
 </html>
