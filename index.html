@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My App Studio</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Corporate Dashboard</title>
     <style>
         /* ===== RESET & BASE ===== */
         * {
@@ -13,713 +13,503 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: #f2f2f7;
-            color: #1c1c1e;
-            padding-top: 44px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 40px 24px;
         }
 
-        /* ===== STATUS BAR (iOS Style) ===== */
-        .status-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 44px;
-            background: rgba(242, 242, 247, 0.92);
-            backdrop-filter: saturate(180%) blur(20px);
-            -webkit-backdrop-filter: saturate(180%) blur(20px);
+        /* ===== HEADER ===== */
+        .dashboard-header {
+            max-width: 1200px;
+            margin: 0 auto 32px;
+            width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 20px;
-            font-size: 12px;
-            font-weight: 600;
-            z-index: 1000;
-            border-bottom: 0.5px solid rgba(0,0,0,0.08);
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e8ecf0;
         }
 
-        .status-bar .time {
-            font-weight: 700;
-        }
-
-        .status-icons {
-            display: flex;
-            gap: 6px;
-            align-items: center;
-            font-size: 13px;
-        }
-
-        /* ===== NAVIGATION ===== */
-        .nav-header {
-            position: fixed;
-            top: 44px;
-            left: 0;
-            right: 0;
-            background: rgba(242, 242, 247, 0.92);
-            backdrop-filter: saturate(180%) blur(20px);
-            -webkit-backdrop-filter: saturate(180%) blur(20px);
-            padding: 10px 20px 8px;
-            z-index: 999;
-            border-bottom: 0.5px solid rgba(0,0,0,0.08);
-        }
-
-        .nav-header h1 {
-            font-size: 28px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            background: linear-gradient(135deg, #007AFF, #5856D6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .nav-header .subtitle {
-            font-size: 13px;
-            color: #8e8e93;
-            font-weight: 400;
-            margin-top: -2px;
-        }
-
-        /* ===== CATEGORY TABS ===== */
-        .category-tabs {
-            position: fixed;
-            top: 100px;
-            left: 0;
-            right: 0;
-            background: rgba(242, 242, 247, 0.92);
-            backdrop-filter: saturate(180%) blur(20px);
-            -webkit-backdrop-filter: saturate(180%) blur(20px);
-            padding: 8px 16px 12px;
-            z-index: 998;
-            overflow-x: auto;
-            white-space: nowrap;
-            -webkit-overflow-scrolling: touch;
-            border-bottom: 0.5px solid rgba(0,0,0,0.05);
-        }
-
-        .category-tabs::-webkit-scrollbar {
-            display: none;
-        }
-
-        .tab-item {
-            display: inline-block;
-            padding: 6px 16px;
-            margin-right: 8px;
-            font-size: 14px;
-            font-weight: 500;
-            color: #8e8e93;
-            background: rgba(142, 142, 147, 0.12);
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: none;
-            font-family: inherit;
-        }
-
-        .tab-item:hover {
-            background: rgba(142, 142, 147, 0.2);
-        }
-
-        .tab-item.active {
-            background: #007AFF;
-            color: white;
-            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
-        }
-
-        /* ===== MAIN CONTENT ===== */
-        .main-content {
-            margin-top: 148px;
-            padding: 16px 20px 100px;
-            max-width: 1200px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* ===== HERO SECTION (App Store Style) ===== */
-        .hero-card {
-            background: linear-gradient(135deg, #007AFF, #5856D6);
-            border-radius: 20px;
-            padding: 40px 30px;
-            color: white;
-            margin-bottom: 30px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 8px 30px rgba(0, 122, 255, 0.3);
-        }
-
-        .hero-card::before {
-            content: '✨';
-            position: absolute;
-            right: -10px;
-            top: -10px;
-            font-size: 120px;
-            opacity: 0.15;
-        }
-
-        .hero-card h2 {
-            font-size: 32px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            margin-bottom: 8px;
-        }
-
-        .hero-card p {
-            font-size: 16px;
-            opacity: 0.9;
-            max-width: 400px;
-            line-height: 1.5;
-        }
-
-        .hero-badge {
-            display: inline-block;
-            background: rgba(255,255,255,0.2);
-            backdrop-filter: blur(10px);
-            padding: 4px 14px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-top: 12px;
-            letter-spacing: 0.3px;
-        }
-
-        /* ===== APP GRID ===== */
-        .section-title {
-            font-size: 22px;
-            font-weight: 700;
-            margin: 30px 0 16px;
-            letter-spacing: -0.3px;
+        .header-left {
             display: flex;
             align-items: center;
-            gap: 10px;
-        }
-
-        .section-title .see-all {
-            font-size: 14px;
-            font-weight: 400;
-            color: #007AFF;
-            margin-left: auto;
-            cursor: pointer;
-        }
-
-        .app-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 16px;
-            margin-bottom: 10px;
         }
 
-        /* ===== APP CARD ===== */
-        .app-card {
-            background: white;
-            border-radius: 14px;
-            padding: 16px;
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-            border: 0.5px solid rgba(0,0,0,0.04);
-        }
-
-        .app-card:hover {
-            transform: scale(1.02);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-        }
-
-        .app-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 14px;
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: #1a1a2e;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
-            flex-shrink: 0;
             color: white;
+            font-size: 20px;
             font-weight: 700;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
 
-        .app-info {
-            flex: 1;
-            min-width: 0;
+        .header-title h1 {
+            font-size: 26px;
+            font-weight: 700;
+            color: #1a1a2e;
+            letter-spacing: -0.5px;
         }
 
-        .app-info h3 {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 2px;
-        }
-
-        .app-info .app-desc {
-            font-size: 13px;
-            color: #8e8e93;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .app-info .app-meta {
-            font-size: 11px;
-            color: #aeaeb2;
+        .header-title p {
+            font-size: 14px;
+            color: #6c757d;
             margin-top: 2px;
         }
 
-        .app-action {
-            flex-shrink: 0;
-        }
-
-        .app-action .get-btn {
-            background: #007AFF;
-            color: white;
-            border: none;
-            padding: 4px 16px;
-            border-radius: 16px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-family: inherit;
-        }
-
-        .app-action .get-btn:hover {
-            background: #0055b3;
-            transform: scale(1.05);
-        }
-
-        .app-action .get-btn.outline {
-            background: transparent;
-            color: #007AFF;
-            border: 1px solid #007AFF;
-        }
-
-        .app-action .get-btn.outline:hover {
-            background: #007AFF;
-            color: white;
-        }
-
-        /* ===== FEATURED SECTION (Horizontal Scroll) ===== */
-        .featured-scroll {
+        .header-right {
             display: flex;
-            gap: 16px;
-            overflow-x: auto;
-            padding: 4px 2px 12px;
-            -webkit-overflow-scrolling: touch;
-            scroll-snap-type: x mandatory;
-        }
-
-        .featured-scroll::-webkit-scrollbar {
-            display: none;
-        }
-
-        .featured-item {
-            min-width: 260px;
-            background: white;
-            border-radius: 16px;
-            padding: 20px;
-            scroll-snap-align: start;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
-            border: 0.5px solid rgba(0,0,0,0.04);
-            flex-shrink: 0;
-        }
-
-        .featured-item .emoji-big {
-            font-size: 40px;
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        .featured-item h4 {
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        .featured-item p {
-            font-size: 13px;
-            color: #8e8e93;
-            margin-top: 4px;
-        }
-
-        /* ===== IFrame Container ===== */
-        .iframe-container {
-            background: white;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.06);
-            margin-top: 8px;
-            border: 0.5px solid rgba(0,0,0,0.04);
-            min-height: 500px;
-        }
-
-        .iframe-container iframe {
-            width: 100%;
-            min-height: 500px;
-            border: none;
-            display: block;
-        }
-
-        .iframe-placeholder {
-            padding: 60px 30px;
-            text-align: center;
-            color: #8e8e93;
-        }
-
-        .iframe-placeholder .big-emoji {
-            font-size: 64px;
-            display: block;
-            margin-bottom: 16px;
-        }
-
-        .iframe-placeholder h3 {
-            font-size: 20px;
-            color: #1c1c1e;
-            margin-bottom: 8px;
-        }
-
-        .iframe-placeholder p {
-            font-size: 15px;
-            max-width: 400px;
-            margin: 0 auto;
-            line-height: 1.6;
-        }
-
-        /* ===== LOADING ===== */
-        .loading-spinner {
-            display: flex;
-            justify-content: center;
             align-items: center;
-            padding: 60px 20px;
-            gap: 12px;
-            color: #8e8e93;
+            gap: 16px;
         }
 
-        .spinner {
-            width: 24px;
-            height: 24px;
-            border: 3px solid #e5e5ea;
-            border-top-color: #007AFF;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
+        .header-badge {
+            background: #e8ecf0;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #1a1a2e;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        .header-badge span {
+            color: #007aff;
+        }
+
+        /* ===== GRID 9 KOTAK ===== */
+        .grid-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            flex: 1;
+        }
+
+        /* ===== KOTAK (CARD) ===== */
+        .grid-item {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 32px 24px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            border: 1px solid #e8ecf0;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            min-height: 200px;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* ===== ANIMATION ZOOM + SHADOW ===== */
+        .grid-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.10);
+            border-color: #1a1a2e;
+            z-index: 10;
+        }
+
+        /* ===== GARISAN ATAS WARNA ===== */
+        .grid-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #1a1a2e;
+            border-radius: 20px 20px 0 0;
+            transition: height 0.3s;
+        }
+
+        .grid-item:hover::before {
+            height: 6px;
+        }
+
+        /* ===== WARNA BERBEZA UNTUK SETIAP KOTAK ===== */
+        .grid-item:nth-child(1)::before { background: #007aff; }
+        .grid-item:nth-child(2)::before { background: #34c759; }
+        .grid-item:nth-child(3)::before { background: #ff9500; }
+        .grid-item:nth-child(4)::before { background: #af52de; }
+        .grid-item:nth-child(5)::before { background: #ff2d55; }
+        .grid-item:nth-child(6)::before { background: #5ac8fa; }
+        .grid-item:nth-child(7)::before { background: #ff6b6b; }
+        .grid-item:nth-child(8)::before { background: #5856d6; }
+        .grid-item:nth-child(9)::before { background: #34c759; }
+
+        /* ===== ICON ===== */
+        .grid-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+            transition: transform 0.3s;
+        }
+
+        .grid-item:hover .grid-icon {
+            transform: scale(1.1) rotate(-4deg);
+        }
+
+        /* ===== TEKS ===== */
+        .grid-item h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 4px;
+        }
+
+        .grid-item p {
+            font-size: 13px;
+            color: #6c757d;
+            margin: 0;
+        }
+
+        .grid-item .badge {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 3px 14px;
+            background: #f0f2f5;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+            color: #6c757d;
+            transition: all 0.3s;
+        }
+
+        .grid-item:hover .badge {
+            background: #1a1a2e;
+            color: white;
+        }
+
+        /* ===== ARROW HOVER ===== */
+        .grid-arrow {
+            position: absolute;
+            bottom: 16px;
+            right: 20px;
+            font-size: 18px;
+            color: #d0d4d8;
+            transition: all 0.3s;
+            opacity: 0;
+            transform: translateX(-8px);
+        }
+
+        .grid-item:hover .grid-arrow {
+            opacity: 1;
+            transform: translateX(0);
+            color: #1a1a2e;
+        }
+
+        /* ===== FOOTER ===== */
+        .dashboard-footer {
+            max-width: 1200px;
+            margin: 40px auto 0;
+            width: 100%;
+            padding-top: 20px;
+            border-top: 1px solid #e8ecf0;
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: #6c757d;
+        }
+
+        .dashboard-footer a {
+            color: #1a1a2e;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .dashboard-footer a:hover {
+            text-decoration: underline;
         }
 
         /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .grid-container {
+                gap: 18px;
+            }
+            .grid-item {
+                min-height: 170px;
+                padding: 24px 18px;
+            }
+            .grid-icon {
+                font-size: 40px;
+            }
+        }
+
         @media (max-width: 768px) {
-            .hero-card {
-                padding: 28px 20px;
+            body {
+                padding: 20px 16px;
             }
 
-            .hero-card h2 {
-                font-size: 24px;
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+                padding-bottom: 16px;
             }
 
-            .app-grid {
-                grid-template-columns: 1fr;
+            .header-right {
+                width: 100%;
+                justify-content: flex-start;
             }
 
-            .featured-item {
-                min-width: 200px;
-            }
-
-            .main-content {
-                padding: 12px 16px 80px;
-            }
-
-            .nav-header h1 {
-                font-size: 22px;
-            }
-
-            .category-tabs {
-                top: 92px;
-                padding: 6px 12px 10px;
-            }
-
-            .main-content {
-                margin-top: 138px;
-            }
-        }
-
-        @media (min-width: 769px) and (max-width: 1024px) {
-            .app-grid {
+            .grid-container {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 14px;
+            }
+
+            .grid-item {
+                min-height: 150px;
+                padding: 20px 14px;
+            }
+
+            .grid-icon {
+                font-size: 34px;
+            }
+            .grid-item h3 {
+                font-size: 15px;
+            }
+            .grid-item p {
+                font-size: 12px;
+            }
+
+            .dashboard-footer {
+                flex-direction: column;
+                gap: 6px;
+                text-align: center;
             }
         }
 
-        /* ===== DARK MODE SUPPORT ===== */
+        @media (max-width: 480px) {
+            .grid-container {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+            .grid-item {
+                min-height: 130px;
+                padding: 16px 12px;
+            }
+            .grid-icon {
+                font-size: 28px;
+                margin-bottom: 6px;
+            }
+            .grid-item h3 {
+                font-size: 13px;
+            }
+            .grid-item p {
+                font-size: 11px;
+            }
+            .grid-item .badge {
+                font-size: 9px;
+                padding: 2px 10px;
+                margin-top: 6px;
+            }
+            .grid-arrow {
+                display: none;
+            }
+            .header-title h1 {
+                font-size: 20px;
+            }
+        }
+
+        /* ===== DARK MODE ===== */
         @media (prefers-color-scheme: dark) {
             body {
-                background: #000000;
-                color: #f5f5f7;
+                background: #0d0d1a;
             }
 
-            .status-bar {
-                background: rgba(0, 0, 0, 0.92);
-                color: #f5f5f7;
-                border-bottom-color: rgba(255,255,255,0.08);
+            .dashboard-header {
+                border-bottom-color: #2a2a3e;
             }
 
-            .nav-header {
-                background: rgba(0, 0, 0, 0.92);
-                border-bottom-color: rgba(255,255,255,0.08);
+            .header-title h1 {
+                color: #f0f0f5;
             }
 
-            .category-tabs {
-                background: rgba(0, 0, 0, 0.92);
-                border-bottom-color: rgba(255,255,255,0.05);
-            }
-
-            .tab-item {
-                color: #8e8e93;
-                background: rgba(142, 142, 147, 0.15);
-            }
-
-            .tab-item.active {
-                background: #007AFF;
-                color: white;
-            }
-
-            .app-card {
-                background: #1c1c1e;
-                border-color: rgba(255,255,255,0.06);
-            }
-
-            .app-info .app-desc {
+            .header-title p {
                 color: #8e8e93;
             }
 
-            .featured-item {
-                background: #1c1c1e;
-                border-color: rgba(255,255,255,0.06);
+            .header-badge {
+                background: #2a2a3e;
+                color: #f0f0f5;
             }
 
-            .iframe-container {
-                background: #1c1c1e;
-                border-color: rgba(255,255,255,0.06);
+            .grid-item {
+                background: #14142a;
+                border-color: #2a2a3e;
             }
 
-            .iframe-placeholder {
+            .grid-item:hover {
+                border-color: #5a5a7a;
+                box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+            }
+
+            .grid-item h3 {
+                color: #f0f0f5;
+            }
+
+            .grid-item p {
                 color: #8e8e93;
             }
 
-            .iframe-placeholder h3 {
-                color: #f5f5f7;
+            .grid-item .badge {
+                background: #2a2a3e;
+                color: #8e8e93;
             }
 
-            .section-title .see-all {
-                color: #0a84ff;
+            .grid-item:hover .badge {
+                background: #f0f0f5;
+                color: #1a1a2e;
             }
 
-            .hero-card {
-                background: linear-gradient(135deg, #0a84ff, #5e5ce6);
+            .grid-arrow {
+                color: #3a3a5a;
+            }
+
+            .grid-item:hover .grid-arrow {
+                color: #a0a0b8;
+            }
+
+            .dashboard-footer {
+                border-top-color: #2a2a3e;
+                color: #8e8e93;
+            }
+
+            .dashboard-footer a {
+                color: #a0a0b8;
+            }
+
+            .dashboard-footer a:hover {
+                color: #f0f0f5;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- ===== STATUS BAR ===== -->
-    <div class="status-bar">
-        <span class="time" id="statusTime">9:41</span>
-        <div class="status-icons">
-            <span>📶</span>
-            <span>📶</span>
-            <span>🔋</span>
+    <!-- ===== HEADER ===== -->
+    <header class="dashboard-header">
+        <div class="header-left">
+            <div class="logo-icon">C</div>
+            <div class="header-title">
+                <h1>Corporate Hub</h1>
+                <p>Access your tools and applications</p>
+            </div>
         </div>
-    </div>
-
-    <!-- ===== NAVIGATION ===== -->
-    <header class="nav-header">
-        <h1>App Studio</h1>
-        <div class="subtitle">Discover amazing projects</div>
+        <div class="header-right">
+            <span class="header-badge">📊 <span>9</span> Applications</span>
+        </div>
     </header>
 
-    <!-- ===== CATEGORY TABS ===== -->
-    <div class="category-tabs">
-        <button class="tab-item active" onclick="loadApp('home')" id="tab-home">🏠 Home</button>
-        <button class="tab-item" onclick="loadApp('page1')" id="tab-page1">📱 Apps</button>
-        <button class="tab-item" onclick="loadApp('page2')" id="tab-page2">🎨 Design</button>
-        <button class="tab-item" onclick="loadApp('page3')" id="tab-page3">⚡ Tools</button>
-        <button class="tab-item" onclick="loadApp('page4')" id="tab-page4">📊 Analytics</button>
-        <button class="tab-item" onclick="loadApp('page5')" id="tab-page5">🎮 Games</button>
+    <!-- ===== GRID 9 KOTAK ===== -->
+    <div class="grid-container">
+
+        <!-- 1. BARCODE -->
+        <a href="barcode.html" target="_blank" class="grid-item">
+            <span class="grid-icon">📱</span>
+            <h3>Barcode System</h3>
+            <p>Auto POS barcode generator</p>
+            <span class="badge">Scanner</span>
+            <span class="grid-arrow">→</span>
+        </a>
+
+        <!-- 2. RANKING -->
+        <a href="ranking.html" target="_blank" class="grid-item">
+            <span class="grid-icon">📊</span>
+            <h3>Ranking Analytics</h3>
+            <p>Performance &amp; leaderboard</p>
+            <span class="badge">Analytics</span>
+            <span class="grid-arrow">→</span>
+        </a>
+
+        <!-- 3. STOCKTAKE -->
+        <a href="stocktake.html" target="_blank" class="grid-item">
+            <span class="grid-icon">📦</span>
+            <h3>Stocktake System</h3>
+            <p>Inventory management</p>
+            <span class="badge">Inventory</span>
+            <span class="grid-arrow">→</span>
+        </a>
+
+        <!-- 4. SALES DASHBOARD -->
+        <a href="sales.html" target="_blank" class="grid-item">
+            <span class="grid-icon">💰</span>
+            <h3>Sales Dashboard</h3>
+            <p>Real-time sales analytics</p>
+            <span class="badge">Finance</span>
+            <span class="grid-arrow">→</span>
+        </a>
+
+        <!-- 5. CUSTOMER CRM -->
+        <a href="crm.html" target="_blank" class="grid-item">
+            <span class="grid-icon">👥</span>
+            <h3>Customer CRM</h3>
+            <p>Manage customer relations</p>
+            <span class="badge">CRM</span>
+            <span class="grid-arrow">→</span>
+        </a>
+
+        <!-- 6. HR PORTAL -->
+        <a href="hr.html" target="_blank" class="grid-item">
+            <span class="grid-icon">👤</span>
+            <h3>HR Portal</h3>
+            <p>Employee management</p>
+            <span class="badge">HR</span>
+            <span class="grid-arrow">→</span>
+        </a>
+
+        <!-- 7. PROJECT TRACKER -->
+        <a href="projects.html" target="_blank" class="grid-item">
+            <span class="grid-icon">📋</span>
+            <h3>Project Tracker</h3>
+            <p>Task &amp; project monitoring</p>
+            <span class="badge">Management</span>
+            <span class="grid-arrow">→</span>
+        </a>
+
+        <!-- 8. REPORT CENTER -->
+        <a href="reports.html" target="_blank" class="grid-item">
+            <span class="grid-icon">📄</span>
+            <h3>Report Center</h3>
+            <p>Generate &amp; export reports</p>
+            <span class="badge">Reports</span>
+            <span class="grid-arrow">→</span>
+        </a>
+
+        <!-- 9. SETTINGS -->
+        <a href="settings.html" target="_blank" class="grid-item">
+            <span class="grid-icon">⚙️</span>
+            <h3>Settings</h3>
+            <p>System configuration</p>
+            <span class="badge">System</span>
+            <span class="grid-arrow">→</span>
+        </a>
+
     </div>
 
-    <!-- ===== MAIN CONTENT ===== -->
-    <main class="main-content" id="mainContent">
-        <!-- Content akan diisi oleh JavaScript -->
-    </main>
+    <!-- ===== FOOTER ===== -->
+    <footer class="dashboard-footer">
+        <span>© 2026 Corporate Hub • All rights reserved</span>
+        <span>
+            <a href="#">Privacy</a> •
+            <a href="#">Support</a> •
+            <a href="#">Contact</a>
+        </span>
+    </footer>
 
-    <script>
-        // ===== UPDATE STATUS BAR TIME =====
-        function updateTime() {
-            const now = new Date();
-            const h = String(now.getHours()).padStart(2, '0');
-            const m = String(now.getMinutes()).padStart(2, '0');
-            document.getElementById('statusTime').textContent = `${h}:${m}`;
-        }
-        updateTime();
-        setInterval(updateTime, 30000);
-
-        // ===== APP DATA =====
-        const apps = [
-            { name: 'Project Alpha', desc: 'Machine Learning Dashboard', icon: '🧠', color: '#007AFF', category: 'page1' },
-            { name: 'Design System', desc: 'UI/UX Component Library', icon: '🎨', color: '#5856D6', category: 'page2' },
-            { name: 'Dev Toolkit', desc: 'Developer Productivity Suite', icon: '⚡', color: '#34C759', category: 'page3' },
-            { name: 'Data Viz Pro', desc: 'Real-time Analytics Platform', icon: '📊', color: '#FF9500', category: 'page4' },
-            { name: 'Game Studio', desc: '2D/3D Game Development', icon: '🎮', color: '#FF2D55', category: 'page5' },
-            { name: 'AI Assistant', desc: 'Smart Chat & Automation', icon: '🤖', color: '#AF52DE', category: 'page1' },
-            { name: 'Photo Lab', desc: 'Image Processing & Filters', icon: '📸', color: '#FF6B6B', category: 'page2' },
-            { name: 'Cloud Sync', desc: 'Real-time Data Sync', icon: '☁️', color: '#5AC8FA', category: 'page3' },
-        ];
-
-        // ===== FEATURED ITEMS =====
-        const featured = [
-            { emoji: '🚀', title: 'New Launch', desc: 'Check out our latest project' },
-            { emoji: '🏆', title: 'Top Rated', desc: 'Most popular apps this month' },
-            { emoji: '🔥', title: 'Trending', desc: 'What\'s hot right now' },
-            { emoji: '💎', title: 'Premium', desc: 'Exclusive high-quality projects' },
-        ];
-
-        // ===== RENDER HOME =====
-        function renderHome() {
-            const container = document.getElementById('mainContent');
-            
-            let featuredHTML = featured.map(item => `
-                <div class="featured-item">
-                    <span class="emoji-big">${item.emoji}</span>
-                    <h4>${item.title}</h4>
-                    <p>${item.desc}</p>
-                </div>
-            `).join('');
-
-            let appsHTML = apps.map(app => `
-                <div class="app-card" onclick="loadApp('${app.category}')">
-                    <div class="app-icon" style="background: ${app.color}">
-                        ${app.icon}
-                    </div>
-                    <div class="app-info">
-                        <h3>${app.name}</h3>
-                        <div class="app-desc">${app.desc}</div>
-                        <div class="app-meta">⭐ 4.8 • 12K downloads</div>
-                    </div>
-                    <div class="app-action">
-                        <button class="get-btn">GET</button>
-                    </div>
-                </div>
-            `).join('');
-
-            container.innerHTML = `
-                <!-- Hero -->
-                <div class="hero-card">
-                    <h2>Welcome to App Studio</h2>
-                    <p>Explore our collection of innovative projects and tools built with passion.</p>
-                    <span class="hero-badge">✨ 8+ Projects Available</span>
-                </div>
-
-                <!-- Featured -->
-                <div class="section-title">
-                    Featured
-                    <span class="see-all">See All →</span>
-                </div>
-                <div class="featured-scroll">
-                    ${featuredHTML}
-                </div>
-
-                <!-- All Apps -->
-                <div class="section-title">
-                    All Projects
-                    <span class="see-all">View All →</span>
-                </div>
-                <div class="app-grid">
-                    ${appsHTML}
-                </div>
-
-                <!-- Info Footer -->
-                <div style="text-align: center; margin-top: 40px; padding: 20px; color: #8e8e93; font-size: 13px; border-top: 0.5px solid rgba(0,0,0,0.06);">
-                    🍎 App Studio • Built with ❤️ • Click any app to open
-                </div>
-            `;
-        }
-
-        // ===== LOAD APP PAGE =====
-        async function loadApp(page) {
-            // Update active tab
-            document.querySelectorAll('.tab-item').forEach(tab => tab.classList.remove('active'));
-            const tabMap = {
-                'home': 'tab-home',
-                'page1': 'tab-page1',
-                'page2': 'tab-page2',
-                'page3': 'tab-page3',
-                'page4': 'tab-page4',
-                'page5': 'tab-page5'
-            };
-            if (tabMap[page]) {
-                document.getElementById(tabMap[page]).classList.add('active');
-            }
-
-            const container = document.getElementById('mainContent');
-
-            if (page === 'home') {
-                renderHome();
-                return;
-            }
-
-            // Show loading
-            container.innerHTML = `
-                <div class="loading-spinner">
-                    <div class="spinner"></div>
-                    <span>Loading ${page}...</span>
-                </div>
-            `;
-
-            try {
-                const response = await fetch(`${page}.html`);
-                if (!response.ok) throw new Error('Page not found');
-
-                const html = await response.text();
-
-                // Find the app name from our data
-                const app = apps.find(a => a.category === page);
-                const appName = app ? app.name : page.replace('page', 'Project ');
-
-                container.innerHTML = `
-                    <div style="margin-bottom: 16px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-                        <span style="font-size: 28px;">${app ? app.icon : '📄'}</span>
-                        <div>
-                            <h2 style="font-size: 22px; font-weight: 700;">${appName}</h2>
-                            <span style="font-size: 13px; color: #8e8e93;">${app ? app.desc : 'Project Details'}</span>
-                        </div>
-                        <button onclick="loadApp('home')" style="margin-left: auto; background: #007AFF; color: white; border: none; padding: 6px 16px; border-radius: 16px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit;">
-                            ← Back
-                        </button>
-                    </div>
-                    <div class="iframe-container">
-                        <iframe src="${page}.html" loading="lazy"></iframe>
-                    </div>
-                `;
-            } catch (error) {
-                container.innerHTML = `
-                    <div style="text-align: center; padding: 60px 20px; background: white; border-radius: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.06);">
-                        <span style="font-size: 64px; display: block; margin-bottom: 16px;">📂</span>
-                        <h3 style="font-size: 20px; margin-bottom: 8px;">Page Not Found</h3>
-                        <p style="color: #8e8e93; max-width: 400px; margin: 0 auto; line-height: 1.6;">
-                            The file <strong>${page}.html</strong> doesn't exist yet. 
-                            Create it or check the filename.
-                        </p>
-                        <button onclick="loadApp('home')" style="margin-top: 20px; background: #007AFF; color: white; border: none; padding: 10px 30px; border-radius: 20px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit;">
-                            🏠 Go Home
-                        </button>
-                    </div>
-                `;
-            }
-        }
-
-        // ===== INIT =====
-        renderHome();
-    </script>
 </body>
 </html>
