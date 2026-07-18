@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Auto POS Barcode System</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+body{
+    margin:0;
+    font-family:'Inter',sans-serif;
+    background:#f5f5f5;
+    color:#222;
+}
+
+.wrapper{
+    display:flex;
+    height:100vh;
+    gap:20px;
+    padding:20px;
+}
+
+.left, .right{
+    background:#fff;
+    border-radius:20px;
+    padding:25px;
+    overflow:auto;
+    box-shadow:0 10px 30px rgba(0,0,0,0.08);
+}
+
+.left{ width:38%; border-top:5px solid #E30613; }
+.right{ width:62%; border-top:5px solid #E30613; }
+
+h2{ color:#E30613; margin-top:0; }
+h3{ color:#E30613; margin-top:0; }
+
+input{
+    width:100%;
+    padding:12px;
+    margin-bottom:10px;
+    border-radius:12px;
+    border:1px solid #ddd;
+    font-size:14px;
+}
+
+input:focus{
+    outline:none;
+    border-color:#E30613;
+    box-shadow:0 0 0 4px rgba(227,6,19,.12);
+}
+
+//.outputText{
+   // text-align:center;
+    //font-weight:700;
+   // color:#E30613;
+   // margin:10px 0;
+//}
+
+.card {
+    background:#fff;
+    padding:20px;
+    border-radius:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+    
+    display: flex;
+    justify-content: space-around; /* distribute evenly */
+    align-items: center;
+    flex-wrap: wrap; /* wrap if screen is small */
+    gap: 20px;
+}
+
+#barcode, #qrcode, #staffBarcode {
+    cursor: zoom-in; 
+    margin: 0 auto; /* top margin + auto left/right for center */
+    display: block;
+}
+
+.history{
+    margin-top:20px;
+    background:#fafafa;
+    border:1px solid #eee;
+    border-radius:15px;
+    padding:15px;
+    max-height:220px;
+    overflow:auto;
+}
+
+.history div{
+    padding:10px;
+    border-left:4px solid #E30613;
+    background:#fff;
+    margin-bottom:8px;
+    border-radius:10px;
+    cursor:pointer;
+    transition:.2s;
+    font-size:13px;
+}
+
+.history div:hover{
+    background:#fff0f0;
+    transform:translateX(5px);
+}
+
+.toast{
+    position:fixed;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
+    background:#111;
+    color:#fff;
+    padding:10px 20px;
+    border-radius:10px;
+    opacity:0;
+    transition:.3s;
+    font-size:13px;
+}
+
+.toast.show{
+    opacity:1;
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<!-- LEFT -->
+<div class="left">
+
+<h2>INPUT</h2>
+
+<label>Store Code</label>
+<input id="store" value="127" maxlength="3">
+
+<label>POS Number</label>
+<input id="pos" maxlength="3">
+
+<label>Receipt Number(THEN PRESS ENTER)</label>
+<input id="receipt" inputmode="numeric" maxlength="9" autofocus>
+
+<h3>Staff ID</h3>
+<input id="staffId" maxlength="17">
+<svg id="staffBarcode"></svg>
+
+</div>
+
+<!-- RIGHT -->
+<div class="right">
+
+<h2>OUTPUT</h2>
+
+<div class="card">
+<svg id="barcode"></svg>
+<div id="qrcode"></div>
+</div>
+
+<div class="history">
+<strong>History (click to recall)</strong>
+<div id="historyList"></div>
+</div>
+
+</div>
+</div>
+
+<div class="toast" id="toast">Copied</div>
+
+<script>
+
+let lastPreview = "";
+let lastFinal = "";
+/*SAVE AS PNG*/
+
+function saveSvgAsPng(svgEl, fileName) {
+    const serializer = new XMLSerializer();
+    const source = serializer.serializeToString(svgEl);
+    const svgBlob = new Blob([source], {type: "image/svg+xml;charset=utf-8"});
+    const url = URL.createObjectURL(svgBlob);
+
+    const img = new Image();
+    img.onload = function() {
+        const canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+        URL.revokeObjectURL(url);
+
+        const pngUrl = canvas.toDataURL("image/png");
+        const a = document.createElement("a");
+        a.href = pngUrl;
+        a.download = fileName;
+        a.click();
+    };
+    img.src = url;
+}
+
+document.getElementById("barcode").addEventListener("click", ()=>{
+    const code = lastFinal || lastPreview;
+    if(!code) return;
+
+    saveSvgAsPng(document.getElementById("barcode"), `barcode-${code}.png`);
+    showToast("Barcode saved as image!");
+});
+
+document.getElementById("qrcode").addEventListener("click", ()=>{
+    const code = lastFinal || lastPreview;
+    if(!code) return;
+
+    // QR code sudah dalam div <div id="qrcode">
+    const qrCanvas = document.querySelector("#qrcode canvas");
+    if(!qrCanvas) return;
+
+    const pngUrl = qrCanvas.toDataURL("image/png");
+    const a = document.createElement("a");
+    a.href = pngUrl;
+    a.download = `qrcode-${code}.png`;
+    a.click();
+
+    showToast("QR Code saved as image!");
+});
+
+document.getElementById("staffBarcode").addEventListener("click", ()=>{
+
+    let id = document.getElementById("staffId").value.trim();
+
+    if(!id) {
+        showToast("No Staff ID");
+        return;
+    }
+
+    saveSvgAsPng(
+        document.getElementById("staffBarcode"),
+        `staff-${id}.png`
+    );
+
+    showToast("Staff Barcode Saved");
+});
+
+/* TOAST */
+function showToast(msg){
+    const t = document.getElementById("toast");
+    t.innerText = msg;
+    t.classList.add("show");
+    setTimeout(()=>t.classList.remove("show"),1200);
+}
+
+/* PAD */
+function pad(v,l){
+    return String(v||"").padStart(l,'0');
+}
+
+/* =========================
+   PREVIEW (LIVE UPDATE)
+========================= */
+function preview(){
+    let store = document.getElementById("store").value.trim();
+    let pos = document.getElementById("pos").value.trim();
+    let receipt = document.getElementById("receipt").value.trim();
+
+    if(!store || !pos || !receipt) return;
+
+    let code = `T000${store}-${pos}${receipt}`;
+
+    if(code === lastPreview) return;
+    lastPreview = code;
+
+    //document.getElementById("output").innerText = code;
+
+    JsBarcode("#barcode", code, {
+        format:"CODE128",
+        width:2,
+        height:80,
+        displayValue:true
+    });
+
+    document.getElementById("qrcode").innerHTML = "";
+    new QRCode(document.getElementById("qrcode"), {
+        text: code,
+        width:120,
+        height:120
+    });
+}
+
+/* =========================
+   FINAL GENERATE (ENTER ONLY)
+========================= */
+function generate(){
+    let store = pad(document.getElementById("store").value,3);
+    let pos = pad(document.getElementById("pos").value,3);
+    let receipt = pad(document.getElementById("receipt").value,9);
+
+    let code = `T000${store}-${pos}${receipt}`;
+
+    if(code === lastFinal) return;
+    lastFinal = code;
+
+    //document.getElementById("output").innerText = code;
+
+    JsBarcode("#barcode", code, {
+        format:"CODE128",
+        width:2,
+        height:80,
+        displayValue:true
+    });
+
+    document.getElementById("qrcode").innerHTML = "";
+    new QRCode(document.getElementById("qrcode"), {
+        text: code,
+        width:120,
+        height:120
+    });
+
+    navigator.clipboard?.writeText(code);
+    saveHistory(code);
+    showToast("Copied: " + code);
+}
+
+/* =========================
+   INPUT EVENTS
+========================= */
+document.getElementById("receipt").addEventListener("input", (e)=>{
+    e.target.value = e.target.value.replace(/\D/g,'');
+    preview();
+});
+
+document.getElementById("receipt").addEventListener("keydown", e=>{
+    if(e.key === "Enter"){
+        e.preventDefault();
+        generate();
+
+        setTimeout(()=>{
+            let r = document.getElementById("receipt");
+            r.focus();
+            r.select();
+        },50);
+    }
+});
+
+/* ENTER NAVIGATION */
+document.getElementById("store").addEventListener("keydown",e=>{
+    if(e.key==="Enter") document.getElementById("pos").focus();
+});
+
+document.getElementById("pos").addEventListener("keydown",e=>{
+    if(e.key==="Enter") document.getElementById("receipt").focus();
+});
+
+/* =========================
+   HISTORY
+========================= */
+function saveHistory(code){
+    let h = JSON.parse(localStorage.getItem("h") || "[]");
+
+    h = h.filter(x => x !== code);
+    h.unshift(code);
+    h = h.slice(0,15);
+
+    localStorage.setItem("h", JSON.stringify(h));
+    renderHistory();
+}
+
+function renderHistory(){
+    let h = JSON.parse(localStorage.getItem("h") || "[]");
+    let box = document.getElementById("historyList");
+
+    box.innerHTML = "";
+
+    h.forEach(code=>{
+        let div = document.createElement("div");
+        div.innerText = code;
+
+        div.onclick = ()=>{
+            navigator.clipboard.writeText(code);
+            showToast("Copied: " + code);
+
+            //document.getElementById("output").innerText = code;
+
+            JsBarcode("#barcode", code, {
+                format:"CODE128",
+                width:2,
+                height:80,
+                displayValue:true
+            });
+
+            document.getElementById("qrcode").innerHTML = "";
+            new QRCode(document.getElementById("qrcode"), {
+                text: code,
+                width:120,
+                height:120
+            });
+
+            let clean = code.replace("T000","");
+            let parts = clean.split("-");
+
+            document.getElementById("store").value = parts[0].slice(0,3);
+            document.getElementById("pos").value = parts[1].slice(0,3);
+            document.getElementById("receipt").value = parts[1].slice(3);
+
+            document.getElementById("receipt").focus();
+        };
+
+        box.appendChild(div);
+    });
+}
+
+renderHistory();
+
+/* =========================
+   STAFF BARCODE
+========================= */
+document.getElementById("staffId").addEventListener("input", ()=>{
+    let id = document.getElementById("staffId").value.replace(/\D/g,'');
+
+    if(id.length !== 17){
+        document.getElementById("staffBarcode").innerHTML = "";
+        return;
+    }
+
+    JsBarcode("#staffBarcode", id, {
+        format:"CODE128",
+        width:2,
+        height:60
+    });
+
+    navigator.clipboard?.writeText(id);
+});
+
+</script>
+
+</body>
+</html>
