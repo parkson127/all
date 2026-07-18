@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Corporate Dashboard</title>
+    <title>PARKSON</title>
     <style>
         /* ===== RESET & BASE ===== */
         * {
@@ -15,6 +15,7 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background: #f0f2f5;
+            color: #1a1a2e;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -50,6 +51,13 @@
             color: white;
             font-size: 20px;
             font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s;
+            text-decoration: none;
+        }
+
+        .logo-icon:hover {
+            transform: scale(1.05);
         }
 
         .header-title h1 {
@@ -84,6 +92,29 @@
             color: #007aff;
         }
 
+        /* ===== HOME BUTTON ===== */
+        .home-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #1a1a2e;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .home-btn:hover {
+            background: #2d2d4e;
+            transform: scale(1.02);
+        }
+
         /* ===== GRID 9 KOTAK ===== */
         .grid-container {
             max-width: 1200px;
@@ -116,7 +147,6 @@
             overflow: hidden;
         }
 
-        /* ===== ANIMATION ZOOM + SHADOW ===== */
         .grid-item:hover {
             transform: scale(1.05);
             box-shadow: 0 16px 48px rgba(0, 0, 0, 0.10);
@@ -124,7 +154,6 @@
             z-index: 10;
         }
 
-        /* ===== GARISAN ATAS WARNA ===== */
         .grid-item::before {
             content: '';
             position: absolute;
@@ -141,7 +170,6 @@
             height: 6px;
         }
 
-        /* ===== WARNA BERBEZA UNTUK SETIAP KOTAK ===== */
         .grid-item:nth-child(1)::before { background: #007aff; }
         .grid-item:nth-child(2)::before { background: #34c759; }
         .grid-item:nth-child(3)::before { background: #ff9500; }
@@ -152,7 +180,6 @@
         .grid-item:nth-child(8)::before { background: #5856d6; }
         .grid-item:nth-child(9)::before { background: #34c759; }
 
-        /* ===== ICON ===== */
         .grid-icon {
             font-size: 48px;
             margin-bottom: 12px;
@@ -163,7 +190,6 @@
             transform: scale(1.1) rotate(-4deg);
         }
 
-        /* ===== TEKS ===== */
         .grid-item h3 {
             font-size: 18px;
             font-weight: 600;
@@ -194,7 +220,6 @@
             color: white;
         }
 
-        /* ===== ARROW HOVER ===== */
         .grid-arrow {
             position: absolute;
             bottom: 16px;
@@ -264,6 +289,7 @@
             .header-right {
                 width: 100%;
                 justify-content: flex-start;
+                flex-wrap: wrap;
             }
 
             .grid-container {
@@ -290,6 +316,11 @@
                 flex-direction: column;
                 gap: 6px;
                 text-align: center;
+            }
+
+            .home-btn {
+                font-size: 12px;
+                padding: 6px 14px;
             }
         }
 
@@ -396,6 +427,15 @@
             .dashboard-footer a:hover {
                 color: #f0f0f5;
             }
+
+            .home-btn {
+                background: #2a2a3e;
+                color: #f0f0f5;
+            }
+
+            .home-btn:hover {
+                background: #3a3a5a;
+            }
         }
     </style>
 </head>
@@ -404,13 +444,16 @@
     <!-- ===== HEADER ===== -->
     <header class="dashboard-header">
         <div class="header-left">
-            <div class="logo-icon">C</div>
+            <a href="https://parkson127.github.io/all/" class="logo-icon">C</a>
             <div class="header-title">
                 <h1>Corporate Hub</h1>
                 <p>Access your tools and applications</p>
             </div>
         </div>
         <div class="header-right">
+            <a href="https://parkson127.github.io/all/" class="home-btn">
+                🏠 Home
+            </a>
             <span class="header-badge">📊 <span>9</span> Applications</span>
         </div>
     </header>
@@ -419,7 +462,7 @@
     <div class="grid-container">
 
         <!-- 1. BARCODE -->
-        <a href="barcode.html" target="_blank" class="grid-item">
+        <a href="https://parkson127.github.io/all/barcode.html" class="grid-item">
             <span class="grid-icon">📱</span>
             <h3>Barcode System</h3>
             <p>Auto POS barcode generator</p>
@@ -428,7 +471,7 @@
         </a>
 
         <!-- 2. RANKING -->
-        <a href="ranking.html" target="_blank" class="grid-item">
+        <a href="https://parkson127.github.io/all/ranking.html" class="grid-item">
             <span class="grid-icon">📊</span>
             <h3>Ranking Analytics</h3>
             <p>Performance &amp; leaderboard</p>
@@ -437,7 +480,7 @@
         </a>
 
         <!-- 3. STOCKTAKE -->
-        <a href="stocktake.html" target="_blank" class="grid-item">
+        <a href="https://parkson127.github.io/all/stocktake.html" class="grid-item">
             <span class="grid-icon">📦</span>
             <h3>Stocktake System</h3>
             <p>Inventory management</p>
@@ -446,7 +489,7 @@
         </a>
 
         <!-- 4. SALES DASHBOARD -->
-        <a href="sales.html" target="_blank" class="grid-item">
+        <a href="https://parkson127.github.io/all/sales.html" class="grid-item">
             <span class="grid-icon">💰</span>
             <h3>Sales Dashboard</h3>
             <p>Real-time sales analytics</p>
@@ -455,7 +498,7 @@
         </a>
 
         <!-- 5. CUSTOMER CRM -->
-        <a href="crm.html" target="_blank" class="grid-item">
+        <a href="https://parkson127.github.io/all/crm.html" class="grid-item">
             <span class="grid-icon">👥</span>
             <h3>Customer CRM</h3>
             <p>Manage customer relations</p>
@@ -464,7 +507,7 @@
         </a>
 
         <!-- 6. HR PORTAL -->
-        <a href="hr.html" target="_blank" class="grid-item">
+        <a href="https://parkson127.github.io/all/hr.html" class="grid-item">
             <span class="grid-icon">👤</span>
             <h3>HR Portal</h3>
             <p>Employee management</p>
@@ -473,7 +516,7 @@
         </a>
 
         <!-- 7. PROJECT TRACKER -->
-        <a href="projects.html" target="_blank" class="grid-item">
+        <a href="https://parkson127.github.io/all/projects.html" class="grid-item">
             <span class="grid-icon">📋</span>
             <h3>Project Tracker</h3>
             <p>Task &amp; project monitoring</p>
@@ -482,7 +525,7 @@
         </a>
 
         <!-- 8. REPORT CENTER -->
-        <a href="reports.html" target="_blank" class="grid-item">
+        <a href="https://parkson127.github.io/all/reports.html" class="grid-item">
             <span class="grid-icon">📄</span>
             <h3>Report Center</h3>
             <p>Generate &amp; export reports</p>
@@ -491,7 +534,7 @@
         </a>
 
         <!-- 9. SETTINGS -->
-        <a href="settings.html" target="_blank" class="grid-item">
+        <a href="https://parkson127.github.io/all/settings.html" class="grid-item">
             <span class="grid-icon">⚙️</span>
             <h3>Settings</h3>
             <p>System configuration</p>
