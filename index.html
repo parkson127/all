@@ -1,1 +1,725 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My App Studio</title>
+    <style>
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #f2f2f7;
+            color: #1c1c1e;
+            padding-top: 44px;
+        }
+
+        /* ===== STATUS BAR (iOS Style) ===== */
+        .status-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 44px;
+            background: rgba(242, 242, 247, 0.92);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            font-size: 12px;
+            font-weight: 600;
+            z-index: 1000;
+            border-bottom: 0.5px solid rgba(0,0,0,0.08);
+        }
+
+        .status-bar .time {
+            font-weight: 700;
+        }
+
+        .status-icons {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            font-size: 13px;
+        }
+
+        /* ===== NAVIGATION ===== */
+        .nav-header {
+            position: fixed;
+            top: 44px;
+            left: 0;
+            right: 0;
+            background: rgba(242, 242, 247, 0.92);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            padding: 10px 20px 8px;
+            z-index: 999;
+            border-bottom: 0.5px solid rgba(0,0,0,0.08);
+        }
+
+        .nav-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #007AFF, #5856D6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-header .subtitle {
+            font-size: 13px;
+            color: #8e8e93;
+            font-weight: 400;
+            margin-top: -2px;
+        }
+
+        /* ===== CATEGORY TABS ===== */
+        .category-tabs {
+            position: fixed;
+            top: 100px;
+            left: 0;
+            right: 0;
+            background: rgba(242, 242, 247, 0.92);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            padding: 8px 16px 12px;
+            z-index: 998;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+            border-bottom: 0.5px solid rgba(0,0,0,0.05);
+        }
+
+        .category-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab-item {
+            display: inline-block;
+            padding: 6px 16px;
+            margin-right: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #8e8e93;
+            background: rgba(142, 142, 147, 0.12);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-family: inherit;
+        }
+
+        .tab-item:hover {
+            background: rgba(142, 142, 147, 0.2);
+        }
+
+        .tab-item.active {
+            background: #007AFF;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            margin-top: 148px;
+            padding: 16px 20px 100px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* ===== HERO SECTION (App Store Style) ===== */
+        .hero-card {
+            background: linear-gradient(135deg, #007AFF, #5856D6);
+            border-radius: 20px;
+            padding: 40px 30px;
+            color: white;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0, 122, 255, 0.3);
+        }
+
+        .hero-card::before {
+            content: '✨';
+            position: absolute;
+            right: -10px;
+            top: -10px;
+            font-size: 120px;
+            opacity: 0.15;
+        }
+
+        .hero-card h2 {
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+        }
+
+        .hero-card p {
+            font-size: 16px;
+            opacity: 0.9;
+            max-width: 400px;
+            line-height: 1.5;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 12px;
+            letter-spacing: 0.3px;
+        }
+
+        /* ===== APP GRID ===== */
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin: 30px 0 16px;
+            letter-spacing: -0.3px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title .see-all {
+            font-size: 14px;
+            font-weight: 400;
+            color: #007AFF;
+            margin-left: auto;
+            cursor: pointer;
+        }
+
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+            margin-bottom: 10px;
+        }
+
+        /* ===== APP CARD ===== */
+        .app-card {
+            background: white;
+            border-radius: 14px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            border: 0.5px solid rgba(0,0,0,0.04);
+        }
+
+        .app-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        }
+
+        .app-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            flex-shrink: 0;
+            color: white;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .app-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .app-info h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .app-info .app-desc {
+            font-size: 13px;
+            color: #8e8e93;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .app-info .app-meta {
+            font-size: 11px;
+            color: #aeaeb2;
+            margin-top: 2px;
+        }
+
+        .app-action {
+            flex-shrink: 0;
+        }
+
+        .app-action .get-btn {
+            background: #007AFF;
+            color: white;
+            border: none;
+            padding: 4px 16px;
+            border-radius: 16px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .app-action .get-btn:hover {
+            background: #0055b3;
+            transform: scale(1.05);
+        }
+
+        .app-action .get-btn.outline {
+            background: transparent;
+            color: #007AFF;
+            border: 1px solid #007AFF;
+        }
+
+        .app-action .get-btn.outline:hover {
+            background: #007AFF;
+            color: white;
+        }
+
+        /* ===== FEATURED SECTION (Horizontal Scroll) ===== */
+        .featured-scroll {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            padding: 4px 2px 12px;
+            -webkit-overflow-scrolling: touch;
+            scroll-snap-type: x mandatory;
+        }
+
+        .featured-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .featured-item {
+            min-width: 260px;
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            scroll-snap-align: start;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            border: 0.5px solid rgba(0,0,0,0.04);
+            flex-shrink: 0;
+        }
+
+        .featured-item .emoji-big {
+            font-size: 40px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .featured-item h4 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .featured-item p {
+            font-size: 13px;
+            color: #8e8e93;
+            margin-top: 4px;
+        }
+
+        /* ===== IFrame Container ===== */
+        .iframe-container {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.06);
+            margin-top: 8px;
+            border: 0.5px solid rgba(0,0,0,0.04);
+            min-height: 500px;
+        }
+
+        .iframe-container iframe {
+            width: 100%;
+            min-height: 500px;
+            border: none;
+            display: block;
+        }
+
+        .iframe-placeholder {
+            padding: 60px 30px;
+            text-align: center;
+            color: #8e8e93;
+        }
+
+        .iframe-placeholder .big-emoji {
+            font-size: 64px;
+            display: block;
+            margin-bottom: 16px;
+        }
+
+        .iframe-placeholder h3 {
+            font-size: 20px;
+            color: #1c1c1e;
+            margin-bottom: 8px;
+        }
+
+        .iframe-placeholder p {
+            font-size: 15px;
+            max-width: 400px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* ===== LOADING ===== */
+        .loading-spinner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 20px;
+            gap: 12px;
+            color: #8e8e93;
+        }
+
+        .spinner {
+            width: 24px;
+            height: 24px;
+            border: 3px solid #e5e5ea;
+            border-top-color: #007AFF;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .hero-card {
+                padding: 28px 20px;
+            }
+
+            .hero-card h2 {
+                font-size: 24px;
+            }
+
+            .app-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .featured-item {
+                min-width: 200px;
+            }
+
+            .main-content {
+                padding: 12px 16px 80px;
+            }
+
+            .nav-header h1 {
+                font-size: 22px;
+            }
+
+            .category-tabs {
+                top: 92px;
+                padding: 6px 12px 10px;
+            }
+
+            .main-content {
+                margin-top: 138px;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .app-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* ===== DARK MODE SUPPORT ===== */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: #000000;
+                color: #f5f5f7;
+            }
+
+            .status-bar {
+                background: rgba(0, 0, 0, 0.92);
+                color: #f5f5f7;
+                border-bottom-color: rgba(255,255,255,0.08);
+            }
+
+            .nav-header {
+                background: rgba(0, 0, 0, 0.92);
+                border-bottom-color: rgba(255,255,255,0.08);
+            }
+
+            .category-tabs {
+                background: rgba(0, 0, 0, 0.92);
+                border-bottom-color: rgba(255,255,255,0.05);
+            }
+
+            .tab-item {
+                color: #8e8e93;
+                background: rgba(142, 142, 147, 0.15);
+            }
+
+            .tab-item.active {
+                background: #007AFF;
+                color: white;
+            }
+
+            .app-card {
+                background: #1c1c1e;
+                border-color: rgba(255,255,255,0.06);
+            }
+
+            .app-info .app-desc {
+                color: #8e8e93;
+            }
+
+            .featured-item {
+                background: #1c1c1e;
+                border-color: rgba(255,255,255,0.06);
+            }
+
+            .iframe-container {
+                background: #1c1c1e;
+                border-color: rgba(255,255,255,0.06);
+            }
+
+            .iframe-placeholder {
+                color: #8e8e93;
+            }
+
+            .iframe-placeholder h3 {
+                color: #f5f5f7;
+            }
+
+            .section-title .see-all {
+                color: #0a84ff;
+            }
+
+            .hero-card {
+                background: linear-gradient(135deg, #0a84ff, #5e5ce6);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== STATUS BAR ===== -->
+    <div class="status-bar">
+        <span class="time" id="statusTime">9:41</span>
+        <div class="status-icons">
+            <span>📶</span>
+            <span>📶</span>
+            <span>🔋</span>
+        </div>
+    </div>
+
+    <!-- ===== NAVIGATION ===== -->
+    <header class="nav-header">
+        <h1>App Studio</h1>
+        <div class="subtitle">Discover amazing projects</div>
+    </header>
+
+    <!-- ===== CATEGORY TABS ===== -->
+    <div class="category-tabs">
+        <button class="tab-item active" onclick="loadApp('home')" id="tab-home">🏠 Home</button>
+        <button class="tab-item" onclick="loadApp('page1')" id="tab-page1">📱 Apps</button>
+        <button class="tab-item" onclick="loadApp('page2')" id="tab-page2">🎨 Design</button>
+        <button class="tab-item" onclick="loadApp('page3')" id="tab-page3">⚡ Tools</button>
+        <button class="tab-item" onclick="loadApp('page4')" id="tab-page4">📊 Analytics</button>
+        <button class="tab-item" onclick="loadApp('page5')" id="tab-page5">🎮 Games</button>
+    </div>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="main-content" id="mainContent">
+        <!-- Content akan diisi oleh JavaScript -->
+    </main>
+
+    <script>
+        // ===== UPDATE STATUS BAR TIME =====
+        function updateTime() {
+            const now = new Date();
+            const h = String(now.getHours()).padStart(2, '0');
+            const m = String(now.getMinutes()).padStart(2, '0');
+            document.getElementById('statusTime').textContent = `${h}:${m}`;
+        }
+        updateTime();
+        setInterval(updateTime, 30000);
+
+        // ===== APP DATA =====
+        const apps = [
+            { name: 'Project Alpha', desc: 'Machine Learning Dashboard', icon: '🧠', color: '#007AFF', category: 'page1' },
+            { name: 'Design System', desc: 'UI/UX Component Library', icon: '🎨', color: '#5856D6', category: 'page2' },
+            { name: 'Dev Toolkit', desc: 'Developer Productivity Suite', icon: '⚡', color: '#34C759', category: 'page3' },
+            { name: 'Data Viz Pro', desc: 'Real-time Analytics Platform', icon: '📊', color: '#FF9500', category: 'page4' },
+            { name: 'Game Studio', desc: '2D/3D Game Development', icon: '🎮', color: '#FF2D55', category: 'page5' },
+            { name: 'AI Assistant', desc: 'Smart Chat & Automation', icon: '🤖', color: '#AF52DE', category: 'page1' },
+            { name: 'Photo Lab', desc: 'Image Processing & Filters', icon: '📸', color: '#FF6B6B', category: 'page2' },
+            { name: 'Cloud Sync', desc: 'Real-time Data Sync', icon: '☁️', color: '#5AC8FA', category: 'page3' },
+        ];
+
+        // ===== FEATURED ITEMS =====
+        const featured = [
+            { emoji: '🚀', title: 'New Launch', desc: 'Check out our latest project' },
+            { emoji: '🏆', title: 'Top Rated', desc: 'Most popular apps this month' },
+            { emoji: '🔥', title: 'Trending', desc: 'What\'s hot right now' },
+            { emoji: '💎', title: 'Premium', desc: 'Exclusive high-quality projects' },
+        ];
+
+        // ===== RENDER HOME =====
+        function renderHome() {
+            const container = document.getElementById('mainContent');
+            
+            let featuredHTML = featured.map(item => `
+                <div class="featured-item">
+                    <span class="emoji-big">${item.emoji}</span>
+                    <h4>${item.title}</h4>
+                    <p>${item.desc}</p>
+                </div>
+            `).join('');
+
+            let appsHTML = apps.map(app => `
+                <div class="app-card" onclick="loadApp('${app.category}')">
+                    <div class="app-icon" style="background: ${app.color}">
+                        ${app.icon}
+                    </div>
+                    <div class="app-info">
+                        <h3>${app.name}</h3>
+                        <div class="app-desc">${app.desc}</div>
+                        <div class="app-meta">⭐ 4.8 • 12K downloads</div>
+                    </div>
+                    <div class="app-action">
+                        <button class="get-btn">GET</button>
+                    </div>
+                </div>
+            `).join('');
+
+            container.innerHTML = `
+                <!-- Hero -->
+                <div class="hero-card">
+                    <h2>Welcome to App Studio</h2>
+                    <p>Explore our collection of innovative projects and tools built with passion.</p>
+                    <span class="hero-badge">✨ 8+ Projects Available</span>
+                </div>
+
+                <!-- Featured -->
+                <div class="section-title">
+                    Featured
+                    <span class="see-all">See All →</span>
+                </div>
+                <div class="featured-scroll">
+                    ${featuredHTML}
+                </div>
+
+                <!-- All Apps -->
+                <div class="section-title">
+                    All Projects
+                    <span class="see-all">View All →</span>
+                </div>
+                <div class="app-grid">
+                    ${appsHTML}
+                </div>
+
+                <!-- Info Footer -->
+                <div style="text-align: center; margin-top: 40px; padding: 20px; color: #8e8e93; font-size: 13px; border-top: 0.5px solid rgba(0,0,0,0.06);">
+                    🍎 App Studio • Built with ❤️ • Click any app to open
+                </div>
+            `;
+        }
+
+        // ===== LOAD APP PAGE =====
+        async function loadApp(page) {
+            // Update active tab
+            document.querySelectorAll('.tab-item').forEach(tab => tab.classList.remove('active'));
+            const tabMap = {
+                'home': 'tab-home',
+                'page1': 'tab-page1',
+                'page2': 'tab-page2',
+                'page3': 'tab-page3',
+                'page4': 'tab-page4',
+                'page5': 'tab-page5'
+            };
+            if (tabMap[page]) {
+                document.getElementById(tabMap[page]).classList.add('active');
+            }
+
+            const container = document.getElementById('mainContent');
+
+            if (page === 'home') {
+                renderHome();
+                return;
+            }
+
+            // Show loading
+            container.innerHTML = `
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <span>Loading ${page}...</span>
+                </div>
+            `;
+
+            try {
+                const response = await fetch(`${page}.html`);
+                if (!response.ok) throw new Error('Page not found');
+
+                const html = await response.text();
+
+                // Find the app name from our data
+                const app = apps.find(a => a.category === page);
+                const appName = app ? app.name : page.replace('page', 'Project ');
+
+                container.innerHTML = `
+                    <div style="margin-bottom: 16px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                        <span style="font-size: 28px;">${app ? app.icon : '📄'}</span>
+                        <div>
+                            <h2 style="font-size: 22px; font-weight: 700;">${appName}</h2>
+                            <span style="font-size: 13px; color: #8e8e93;">${app ? app.desc : 'Project Details'}</span>
+                        </div>
+                        <button onclick="loadApp('home')" style="margin-left: auto; background: #007AFF; color: white; border: none; padding: 6px 16px; border-radius: 16px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit;">
+                            ← Back
+                        </button>
+                    </div>
+                    <div class="iframe-container">
+                        <iframe src="${page}.html" loading="lazy"></iframe>
+                    </div>
+                `;
+            } catch (error) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 60px 20px; background: white; border-radius: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.06);">
+                        <span style="font-size: 64px; display: block; margin-bottom: 16px;">📂</span>
+                        <h3 style="font-size: 20px; margin-bottom: 8px;">Page Not Found</h3>
+                        <p style="color: #8e8e93; max-width: 400px; margin: 0 auto; line-height: 1.6;">
+                            The file <strong>${page}.html</strong> doesn't exist yet. 
+                            Create it or check the filename.
+                        </p>
+                        <button onclick="loadApp('home')" style="margin-top: 20px; background: #007AFF; color: white; border: none; padding: 10px 30px; border-radius: 20px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit;">
+                            🏠 Go Home
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        // ===== INIT =====
+        renderHome();
+    </script>
+</body>
+</html>
