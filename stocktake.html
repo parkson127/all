@@ -684,17 +684,17 @@
             <div class="header-badge"><span class="dot"></span>Ready</div>
         </div>
 
-        <div class="drop-zone" id="dropZone">
-            <span class="icon">📁</span>
-            <h3>Seret & Lepas fail .txt di sini</h3>
-            <p>atau klik butang di bawah untuk pilih fail</p>
-            <button class="browse-btn" id="browseBtn">Pilih Fail</button>
-            <input type="file" id="fileInput" accept=".txt">
-            <div class="file-info" id="fileInfo" style="display:none;">
-                <span id="fileName"></span>
-                <button class="remove-btn" id="removeFileBtn">✕</button>
-            </div>
-        </div>
+        <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click();">
+    <span class="icon">📁</span>
+    <h3>Seret & Lepas fail .txt di sini</h3>
+    <p>atau klik butang di bawah untuk pilih fail</p>
+    <button class="browse-btn" id="browseBtn" onclick="event.stopPropagation();">Pilih Fail</button>
+    <input type="file" id="fileInput" accept=".txt" style="display:none;">
+    <div class="file-info" id="fileInfo" style="display:none;">
+        <span id="fileName"></span>
+        <button class="remove-btn" id="removeFileBtn">✕</button>
+    </div>
+</div>
 
         <div id="status"><span class="status-icon"></span><span id="statusMsg"></span></div>
 
