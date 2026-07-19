@@ -1,0 +1,99 @@
+/* ================================================================
+   UI5.CSS – TEMA ROSE PINK (Moden & Feminin)
+   ================================================================ */
+
+:root {
+    --primary: #D81B60;
+    --primary-light: #F06292;
+    --primary-dark: #880E4F;
+    --secondary: #EC407A;
+    --secondary-light: #F48FB1;
+    --secondary-dark: #C2185B;
+    --bg-main: #fdf0f4;
+    --bg-card: #ffffff;
+    --bg-input: #fdf8fa;
+    --text-primary: #2e1a22;
+    --text-secondary: #5a3a46;
+    --text-muted: #8a6a76;
+    --border-color: #e8d0d8;
+    --shadow-pink: rgba(216,27,96,0.25);
+    --gradient-pink: linear-gradient(135deg, #D81B60, #F06292);
+}
+
+body {
+    background: var(--bg-main);
+    color: var(--text-primary);
+}
+
+.home-bar {
+    background: rgba(255, 255, 255, 0.6);
+    border-bottom: 1px solid rgba(216,27,96,0.2);
+}
+
+.home-btn {
+    background: var(--gradient-pink);
+    color: #ffffff;
+    box-shadow: 0 2px 8px var(--shadow-pink);
+}
+
+.home-btn:hover {
+    background: #EC407A;
+    color: #ffffff;
+    box-shadow: 0 4px 16px var(--shadow-pink);
+}
+
+.home-bar .hint {
+    color: #5a3a46;
+}
+
+.container, .input-section, .output-section, .sku-staff-section, .card {
+    background: var(--bg-card);
+    border-color: var(--border-color);
+}
+
+input, textarea, .field input {
+    background: var(--bg-input);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+input:focus, textarea:focus, .field input:focus {
+    border-color: var(--secondary);
+    box-shadow: 0 0 0 3px rgba(216,27,96,0.15);
+}
+
+.generate-btn, .btn-primary, .btn-confirm {
+    background: var(--gradient-pink);
+    color: #ffffff;
+    box-shadow: 0 4px 16px var(--shadow-pink);
+}
+
+.generate-btn:hover, .btn-primary:hover, .btn-confirm:hover {
+    background: #EC407A;
+    color: #ffffff;
+}
+
+label, .field label {
+    color: var(--text-muted);
+}
+
+.history-item {
+    background: var(--bg-input);
+    color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+.divider-gold, .divider {
+    background: var(--gradient-pink);
+    height: 3px;
+}
+
+.badge-gold, .badge-pro {
+    background: var(--gradient-pink);
+    color: #ffffff;
+}
+
+.sub-title {
+    border-left-color: var(--secondary);
+    color: var(--text-secondary);
+}
