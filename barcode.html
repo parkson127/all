@@ -29,47 +29,75 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* ===== HOME BAR ===== */
-        .home-bar {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            padding: 8px 20px;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+       /* ===== HOME BAR - BLEND DENGAN PAGE ===== */
+.home-bar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 9999 !important;
+    background: transparent !important;  /* ← BUANG BACKGROUND PUTIH */
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    padding: 10px 24px !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04) !important;  /* ← GARISAN HALUS */
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    box-shadow: none !important;  /* ← BUANG SHADOW */
+}
 
-        .home-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: #1a1a2e;
-            color: white;
-            border: none;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            font-family: inherit;
-            transition: all 0.2s;
-        }
+.home-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    background: rgba(255, 255, 255, 0.06) !important;  /* ← BUTANG SEPARA TRANSPARAN */
+    color: #f0f0f5 !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    padding: 8px 20px !important;
+    border-radius: 24px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+    font-family: inherit !important;
+    transition: all 0.2s !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+}
 
-        .home-btn:hover {
-            background: #2d2d4e;
-            transform: scale(1.02);
-        }
+.home-btn:hover {
+    background: rgba(255, 255, 255, 0.12) !important;
+    transform: scale(1.03) !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+}
 
-        .home-bar .hint {
-            font-size: 13px;
-            color: #6c757d;
-        }
+.home-bar .hint {
+    font-size: 13px !important;
+    color: rgba(255, 255, 255, 0.5) !important;  /* ← HINT SEPARA TRANSPARAN */
+}
+
+/* ===== TAMBAH PADDING ATAS BODY ===== */
+body {
+    padding-top: 60px !important;
+}
+
+/* ===== DARK MODE (Sudah Sesuai) ===== */
+@media (prefers-color-scheme: dark) {
+    .home-bar {
+        border-bottom-color: rgba(255, 255, 255, 0.04) !important;
+    }
+    .home-btn {
+        background: rgba(255, 255, 255, 0.06) !important;
+        color: #f0f0f5 !important;
+    }
+    .home-btn:hover {
+        background: rgba(255, 255, 255, 0.12) !important;
+    }
+    .home-bar .hint {
+        color: rgba(255, 255, 255, 0.4) !important;
+    }
+}
 
         /* ===== MAIN WRAPPER ===== */
         .wrapper {
