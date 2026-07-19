@@ -7,63 +7,71 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <style>
-        /* ===== HOME BAR ===== */
+        /* ===== HOME BAR - FORCE STICKY ===== */
 .home-bar {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: rgba(255, 255, 255, 0.92);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    padding: 8px 20px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-    display: flex;
-    align-items: center;
-    gap: 12px;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 9999 !important;
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    padding: 10px 24px !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06) !important;
 }
 
 .home-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: #1a1a2e;
-    color: white;
-    border: none;
-    padding: 6px 16px;
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    text-decoration: none;
-    font-family: inherit;
-    transition: all 0.2s;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    background: #1a1a2e !important;
+    color: white !important;
+    border: none !important;
+    padding: 8px 20px !important;
+    border-radius: 24px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+    font-family: inherit !important;
+    transition: all 0.2s !important;
 }
 
 .home-btn:hover {
-    background: #2d2d4e;
-    transform: scale(1.02);
+    background: #2d2d4e !important;
+    transform: scale(1.03) !important;
 }
 
 .home-bar .hint {
-    font-size: 13px;
-    color: #6c757d;
+    font-size: 13px !important;
+    color: #6c757d !important;
 }
 
-/* ===== DARK MODE SUPPORT ===== */
+/* ===== TAMBAH PADDING ATAS BODY UNTUK HOME BAR ===== */
+body {
+    padding-top: 60px !important;
+}
+
+/* ===== DARK MODE ===== */
 @media (prefers-color-scheme: dark) {
     .home-bar {
-        background: rgba(20, 20, 30, 0.92);
-        border-bottom-color: rgba(255, 255, 255, 0.06);
+        background: rgba(20, 20, 30, 0.95) !important;
+        border-bottom-color: rgba(255, 255, 255, 0.06) !important;
     }
     .home-bar .hint {
-        color: #8e8e93;
+        color: #8e8e93 !important;
     }
     .home-btn {
-        background: #2a2a3e;
-        color: #f0f0f5;
+        background: #2a2a3e !important;
+        color: #f0f0f5 !important;
     }
     .home-btn:hover {
-        background: #3a3a5a;
+        background: #3a3a5a !important;
     }
 }
         *{margin:0;padding:0;box-sizing:border-box}
