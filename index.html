@@ -128,7 +128,6 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: var(--gradient-gold, linear-gradient(135deg, #C9A84C, #E8D5A5));
             border-radius: 20px 20px 0 0;
             transition: height 0.3s;
         }
@@ -137,16 +136,27 @@
             height: 6px;
         }
 
-        /* Warna berbeza untuk setiap kotak (optional - boleh kekal atau guna gold semua) */
-        .grid-item:nth-child(1)::before { background: #C9A84C; }
-        .grid-item:nth-child(2)::before { background: #C9A84C; }
-        .grid-item:nth-child(3)::before { background: #C9A84C; }
-        .grid-item:nth-child(4)::before { background: #C9A84C; }
-        .grid-item:nth-child(5)::before { background: #C9A84C; }
-        .grid-item:nth-child(6)::before { background: #C9A84C; }
-        .grid-item:nth-child(7)::before { background: #C9A84C; }
-        .grid-item:nth-child(8)::before { background: #C9A84C; }
-        .grid-item:nth-child(9)::before { background: #C9A84C; }
+        /* ===== WARNA BERBEZA UNTUK SETIAP KOTAK ===== */
+        .grid-item:nth-child(1)::before { background: #007aff; }
+        .grid-item:nth-child(2)::before { background: #34c759; }
+        .grid-item:nth-child(3)::before { background: #ff9500; }
+        .grid-item:nth-child(4)::before { background: #af52de; }
+        .grid-item:nth-child(5)::before { background: #ff2d55; }
+        .grid-item:nth-child(6)::before { background: #5ac8fa; }
+        .grid-item:nth-child(7)::before { background: #ff6b6b; }
+        .grid-item:nth-child(8)::before { background: #5856d6; }
+        .grid-item:nth-child(9)::before { background: #34c759; }
+
+        /* Hover effect untuk setiap warna */
+        .grid-item:nth-child(1):hover { border-color: #007aff; }
+        .grid-item:nth-child(2):hover { border-color: #34c759; }
+        .grid-item:nth-child(3):hover { border-color: #ff9500; }
+        .grid-item:nth-child(4):hover { border-color: #af52de; }
+        .grid-item:nth-child(5):hover { border-color: #ff2d55; }
+        .grid-item:nth-child(6):hover { border-color: #5ac8fa; }
+        .grid-item:nth-child(7):hover { border-color: #ff6b6b; }
+        .grid-item:nth-child(8):hover { border-color: #5856d6; }
+        .grid-item:nth-child(9):hover { border-color: #34c759; }
 
         .grid-icon {
             font-size: 48px;
