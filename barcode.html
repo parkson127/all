@@ -735,6 +735,186 @@ body {
                 color: #8e8e93;
             }
         }
+        /* ================================================================
+   OVERRIDE TEMA: LIGHT + GOLD + TRANSPARENT HOME BAR
+   ================================================================ */
+
+/* ----- TEMA GOLD ----- */
+:root {
+    --primary: #C9A84C !important;
+    --primary-light: #E8D5A5 !important;
+    --primary-dark: #A8893A !important;
+    --secondary: #C9A84C !important;
+    --secondary-light: #E8D5A5 !important;
+    --secondary-dark: #A8893A !important;
+    --bg-main: #f5f0e8 !important;
+    --bg-card: #ffffff !important;
+    --bg-input: #faf8f4 !important;
+    --text-primary: #1a1a2e !important;
+    --text-secondary: #4a4a5a !important;
+    --text-muted: #6c757d !important;
+    --border-color: #e8e0d5 !important;
+    --shadow-gold: rgba(201,168,76,0.25) !important;
+    --gradient-gold: linear-gradient(135deg, #C9A84C, #E8D5A5) !important;
+}
+
+/* ----- BACKGROUND & TEKS ----- */
+body {
+    background: var(--bg-main) !important;
+    color: var(--text-primary) !important;
+}
+
+.container, .input-section, .output-section, .sku-staff-section, .barcode-display {
+    background: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04) !important;
+}
+
+h1, h2, h3, h4, .app-header h1, .output-header h2 {
+    color: var(--text-primary) !important;
+}
+
+p, .desc, .text-muted, .hint, .zoom-hint {
+    color: var(--text-muted) !important;
+}
+
+/* ----- INPUT & TEXTAREA ----- */
+input, textarea, .field input {
+    background: var(--bg-input) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
+}
+
+input:focus, textarea:focus, .field input:focus {
+    border-color: var(--secondary) !important;
+    box-shadow: 0 0 0 3px rgba(201,168,76,0.15) !important;
+}
+
+/* ----- BUTTON GENERATE / PRIMARY ACTIONS ----- */
+.generate-btn, .btn-primary, .btn-confirm {
+    background: var(--gradient-gold) !important;
+    color: #1a1a2e !important;  /* TEKS GELAP */
+    box-shadow: 0 4px 16px var(--shadow-gold) !important;
+}
+
+.generate-btn:hover, .btn-primary:hover, .btn-confirm:hover {
+    background: #E8D5A5 !important;
+    color: #1a1a2e !important;
+    box-shadow: 0 6px 24px var(--shadow-gold) !important;
+    transform: translateY(-2px) !important;
+}
+
+/* ----- HOME BAR (TRANSPARENT) ----- */
+.home-bar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 9999 !important;
+    background: rgba(255, 255, 255, 0.6) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    padding: 10px 24px !important;
+    border-bottom: 1px solid rgba(201,168,76,0.2) !important;
+    box-shadow: none !important;
+}
+
+.home-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    background: var(--gradient-gold) !important;
+    color: #1a1a2e !important;   /* TEKS GELAP */
+    border: none !important;
+    padding: 8px 20px !important;
+    border-radius: 24px !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+    box-shadow: 0 2px 8px var(--shadow-gold) !important;
+    transition: all 0.2s !important;
+}
+
+.home-btn:hover {
+    transform: scale(1.04) !important;
+    background: #E8D5A5 !important;
+    color: #1a1a2e !important;
+    box-shadow: 0 4px 16px var(--shadow-gold) !important;
+}
+
+.home-bar .hint {
+    font-size: 13px !important;
+    color: #4a4a5a !important;
+    font-weight: 500 !important;
+}
+
+/* ----- DIVIDER & ACCENTS (GOLD) ----- */
+.divider-gold, .divider {
+    background: var(--gradient-gold) !important;
+    height: 3px !important;
+    border-radius: 2px !important;
+}
+
+.badge-gold, .badge-pro {
+    background: var(--gradient-gold) !important;
+    color: #1a1a2e !important;
+}
+
+/* ----- LABELS & HEADERS ----- */
+label, .field label, .staff-label {
+    color: var(--text-muted) !important;
+}
+
+.sub-title {
+    border-left-color: var(--secondary) !important;
+    color: var(--text-secondary) !important;
+}
+
+/* ----- HISTORY ITEMS ----- */
+.history-item {
+    background: var(--bg-input) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+.history-item:active, .history-item:hover {
+    background: #e8e0d5 !important;
+}
+
+/* ----- DARK MODE OVERRIDE ----- */
+@media (prefers-color-scheme: dark) {
+    body {
+        background: #1a1a2e !important;
+    }
+    .container, .input-section, .output-section, .sku-staff-section, .barcode-display {
+        background: #2a2a3e !important;
+        border-color: #3a3a4e !important;
+    }
+    .home-bar {
+        background: rgba(20, 20, 30, 0.7) !important;
+        border-bottom-color: rgba(201,168,76,0.2) !important;
+    }
+    .home-btn {
+        background: var(--gradient-gold) !important;
+        color: #1a1a2e !important;
+    }
+    .home-btn:hover {
+        background: #E8D5A5 !important;
+        color: #1a1a2e !important;
+    }
+    .home-bar .hint {
+        color: #d0c8b8 !important;
+    }
+    input, textarea, .field input {
+        background: #2a2a3e !important;
+        border-color: #3a3a4e !important;
+        color: #f0f0f5 !important;
+    }
+    .history-item {
+        background: #2a2a3e !important;
+        color: #f0f0f5 !important;
+    }
+}
     </style>
 </head>
 <body>
