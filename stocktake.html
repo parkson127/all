@@ -6,6 +6,65 @@
 <title>Stocktake Report Parser PRO</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
 <style>
+   /* ===== HOME BAR ===== */
+.home-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 8px 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.home-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #1a1a2e;
+    color: white;
+    border: none;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: inherit;
+    transition: all 0.2s;
+}
+
+.home-btn:hover {
+    background: #2d2d4e;
+    transform: scale(1.02);
+}
+
+.home-bar .hint {
+    font-size: 13px;
+    color: #6c757d;
+}
+
+/* ===== DARK MODE SUPPORT ===== */
+@media (prefers-color-scheme: dark) {
+    .home-bar {
+        background: rgba(20, 20, 30, 0.92);
+        border-bottom-color: rgba(255, 255, 255, 0.06);
+    }
+    .home-bar .hint {
+        color: #8e8e93;
+    }
+    .home-btn {
+        background: #2a2a3e;
+        color: #f0f0f5;
+    }
+    .home-btn:hover {
+        background: #3a3a5a;
+    }
+} 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif; background: #f0f4f8; color: #1a2332; min-height: 100vh; padding: 24px; }
 .container { max-width: 1440px; margin: 0 auto; background: #fff; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,20,40,.08); padding: 32px 40px 40px; transition: all .2s; }
@@ -81,6 +140,20 @@ body { font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif; b
 </style>
 </head>
 <body>
+   <body>
+
+    <!-- ===== HOME BAR ===== -->
+    <div class="home-bar">
+        <a href="https://parkson127.github.io/all/" class="home-btn">
+            🏠 Home
+        </a>
+        <span class="hint">← Back to dashboard</span>
+    </div>
+
+    <!-- ===== KANDUNGAN ASAL (SEMUA YANG SEDIA ADA) ===== -->
+    <!-- ... kandungan sedia ada anda ... -->
+
+</body> 
 <div class="container">
     <div class="header"><div class="header-left"><div class="header-icon">📊</div><div><h1>Stocktake <span>Parser</span></h1><div class="header-sub">Parkson RA4A / RA04 · Export to Excel</div></div></div><div class="header-badge"><span class="dot"></span>Ready</div></div>
     <div class="drop-zone" id="dropZone"><span class="icon">📁</span><h3>Seret & Lepas fail .txt di sini</h3><p>atau klik butang di bawah untuk pilih fail</p><button class="browse-btn" id="browseBtn">Pilih Fail</button><input type="file" id="fileInput" accept=".txt"><div class="file-info" id="fileInfo" style="display:none;"><span id="fileName"></span><button class="remove-btn" id="removeFileBtn">✕</button></div></div>
