@@ -1,0 +1,208 @@
+/* ================================================================
+   UI1.CSS – TEMA EMAS (GOLD THEME)
+   ================================================================ */
+
+/* ===== TEMA TERANG DENGAN AKSEN EMAS ===== */
+:root {
+    --primary: #C9A84C;              /* Emas utama */
+    --primary-light: #E8D5A5;        /* Emas cerah */
+    --primary-dark: #A8893A;         /* Emas gelap */
+    --secondary: #C9A84C;
+    --secondary-light: #E8D5A5;
+    --secondary-dark: #A8893A;
+    --bg-main: #f5f0e8;              /* Background krim lembut */
+    --bg-card: #ffffff;
+    --bg-input: #faf8f4;
+    --text-primary: #1a1a2e;
+    --text-secondary: #4a4a5a;
+    --text-muted: #6c757d;
+    --border-color: #e8e0d5;
+    --shadow-gold: rgba(201,168,76,0.25);
+    --gradient-gold: linear-gradient(135deg, #C9A84C, #E8D5A5);
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Inter', sans-serif;
+    --success: #34c759;
+    --danger: #ff2d55;
+}
+
+/* ===== HOME BAR - TRANSPARENT BLEND ===== */
+.home-bar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 9999 !important;
+    background: rgba(255, 255, 255, 0.6) !important;  /* Separuh transparent */
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    padding: 10px 24px !important;
+    border-bottom: 1px solid rgba(201, 168, 76, 0.2) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    box-shadow: none !important;
+}
+
+/* ===== BUTANG HOME - LATAR EMAS, TEKS GELAP ===== */
+.home-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    background: var(--gradient-gold) !important;
+    color: #1a1a2e !important;   /* TEKS GELAP */
+    border: none !important;
+    padding: 8px 20px !important;
+    border-radius: 24px !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+    font-family: inherit !important;
+    transition: all 0.2s !important;
+    box-shadow: 0 2px 8px var(--shadow-gold) !important;
+}
+
+.home-btn:hover {
+    transform: scale(1.04) !important;
+    box-shadow: 0 4px 16px var(--shadow-gold) !important;
+    background: #E8D5A5 !important;
+    color: #1a1a2e !important;
+}
+
+.home-bar .hint {
+    font-size: 13px !important;
+    color: #4a4a5a !important;   /* Gelap, bukan putih */
+    font-weight: 500 !important;
+}
+
+/* ===== PADDING ATAS UNTUK HOME BAR ===== */
+body {
+    padding-top: 70px !important;
+    min-height: 100vh;
+}
+
+/* ===== DARK MODE - TETAPKAN HOME BAR TRANSPARENT ===== */
+@media (prefers-color-scheme: dark) {
+    .home-bar {
+        background: rgba(20, 20, 30, 0.7) !important;
+        border-bottom-color: rgba(201, 168, 76, 0.2) !important;
+    }
+    .home-btn {
+        background: var(--gradient-gold) !important;
+        color: #1a1a2e !important;
+    }
+    .home-btn:hover {
+        background: #E8D5A5 !important;
+        color: #1a1a2e !important;
+    }
+    .home-bar .hint {
+        color: #d0c8b8 !important;
+    }
+}
+
+/* ===== ELEMEN LAIN (GOLD ACCENTS) ===== */
+.divider-gold {
+    width: 80px;
+    height: 3px;
+    background: var(--gradient-gold) !important;
+    border-radius: 2px;
+    margin: 0.8rem 0 1.2rem;
+}
+
+.badge-gold, .badge-pro {
+    background: var(--gradient-gold) !important;
+    color: #1a1a2e !important;
+    padding: 0.2rem 1rem;
+    border-radius: 30px;
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    display: inline-block;
+}
+
+.sub-title-gold {
+    border-left: 3px solid var(--secondary) !important;
+    padding-left: 1rem;
+    color: var(--text-secondary) !important;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1.5rem;
+}
+
+/* ===== BUTANG GENERATE / PRIMARY ACTIONS ===== */
+.generate-btn, .btn-primary, .btn-confirm {
+    background: var(--gradient-gold) !important;
+    color: #1a1a2e !important;
+    box-shadow: 0 4px 16px var(--shadow-gold) !important;
+    border: none;
+    padding: 16px;
+    border-radius: 16px;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.generate-btn:hover, .btn-primary:hover, .btn-confirm:hover {
+    background: #E8D5A5 !important;
+    color: #1a1a2e !important;
+    box-shadow: 0 6px 24px var(--shadow-gold) !important;
+    transform: translateY(-2px) !important;
+}
+
+/* ===== INPUT FIELDS ===== */
+input, textarea, .field input {
+    background: var(--bg-input) !important;
+    border: 1.5px solid var(--border-color) !important;
+    border-radius: 14px;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-primary) !important;
+    width: 100%;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+
+input:focus, textarea:focus, .field input:focus {
+    outline: none;
+    border-color: var(--secondary) !important;
+    box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.15) !important;
+}
+
+/* ===== CARD / CONTAINER ===== */
+.card, .container, .input-section, .output-section, .sku-staff-section {
+    background: var(--bg-card) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 20px;
+    padding: 20px 18px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04) !important;
+    margin-bottom: 16px;
+}
+
+/* ===== HISTORY ITEMS ===== */
+.history-item {
+    background: var(--bg-input) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+.history-item:hover, .history-item:active {
+    background: #e8e0d5 !important;
+}
+
+/* ===== LABEL ===== */
+label, .field label, .staff-label {
+    color: var(--text-muted) !important;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
