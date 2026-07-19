@@ -7,6 +7,65 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <style>
+        /* ===== HOME BAR ===== */
+.home-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 8px 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.home-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #1a1a2e;
+    color: white;
+    border: none;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: inherit;
+    transition: all 0.2s;
+}
+
+.home-btn:hover {
+    background: #2d2d4e;
+    transform: scale(1.02);
+}
+
+.home-bar .hint {
+    font-size: 13px;
+    color: #6c757d;
+}
+
+/* ===== DARK MODE SUPPORT ===== */
+@media (prefers-color-scheme: dark) {
+    .home-bar {
+        background: rgba(20, 20, 30, 0.92);
+        border-bottom-color: rgba(255, 255, 255, 0.06);
+    }
+    .home-bar .hint {
+        color: #8e8e93;
+    }
+    .home-btn {
+        background: #2a2a3e;
+        color: #f0f0f5;
+    }
+    .home-btn:hover {
+        background: #3a3a5a;
+    }
+}
         *{margin:0;padding:0;box-sizing:border-box}
         :root{--primary:#1B2A4A;--primary-light:#2E3B5E;--primary-dark:#0A0E17;--secondary:#C9A84C;--secondary-light:#E8D5A5;--secondary-dark:#A8893A;--bg-main:#0A0E17;--bg-card:#111927;--bg-input:#1A2744;--text-primary:#F0F4F8;--text-secondary:#B0C4DE;--text-muted:#6B7F9A;--border-color:#2E3B5E;--shadow-gold:rgba(201,168,76,0.3);--gradient-gold:linear-gradient(135deg,#C9A84C,#E8D5A5);--font-heading:'Playfair Display',serif;--font-body:'Inter',sans-serif;--success:#4CAF50;--danger:#EF5350}
         body{background:var(--bg-main);font-family:var(--font-body);padding:2rem 1rem;min-height:100vh;display:flex;align-items:center;justify-content:center;color:var(--text-primary);background-image:radial-gradient(ellipse at 10% 20%,rgba(201,168,76,0.05)0%,transparent 50%),radial-gradient(ellipse at 90% 80%,rgba(27,42,74,0.3)0%,transparent 50%)}
@@ -118,6 +177,20 @@
     </style>
 </head>
 <body>
+  <body>
+
+    <!-- ===== HOME BAR ===== -->
+    <div class="home-bar">
+        <a href="https://parkson127.github.io/all/" class="home-btn">
+            🏠 Home
+        </a>
+        <span class="hint">← Back to dashboard</span>
+    </div>
+
+    <!-- ===== KANDUNGAN ASAL (SEMUA YANG SEDIA ADA) ===== -->
+    <!-- ... kandungan sedia ada anda ... -->
+
+</body>  
 <div class="container">
     <div class="header-wrapper">
         <div class="logo-section">
