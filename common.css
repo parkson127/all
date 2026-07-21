@@ -73,9 +73,9 @@ body {
     right: 85px;
 }
 
-/* ----- FALLBACK: Jika guna top bar home (untuk keserasian) ----- */
+/* Sembunyi top bar home jika masih wujud */
 .home-bar {
-    display: none; /* Sembunyi top bar jika masih ada dalam HTML */
+    display: none !important;
 }
 
 /* ================================================================
