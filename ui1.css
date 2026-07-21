@@ -4,13 +4,13 @@
 
 /* ===== TEMA TERANG DENGAN AKSEN EMAS ===== */
 :root {
-    --primary: #C9A84C;              /* Emas utama */
-    --primary-light: #E8D5A5;        /* Emas cerah */
-    --primary-dark: #A8893A;         /* Emas gelap */
+    --primary: #C9A84C;
+    --primary-light: #E8D5A5;
+    --primary-dark: #A8893A;
     --secondary: #C9A84C;
     --secondary-light: #E8D5A5;
     --secondary-dark: #A8893A;
-    --bg-main: #f5f0e8;              /* Background krim lembut */
+    --bg-main: #f5f0e8;
     --bg-card: #ffffff;
     --bg-input: #faf8f4;
     --text-primary: #1a1a2e;
@@ -23,81 +23,6 @@
     --font-body: 'Inter', sans-serif;
     --success: #34c759;
     --danger: #ff2d55;
-}
-
-/* ===== HOME BAR - TRANSPARENT BLEND ===== */
-.home-bar {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    z-index: 9999 !important;
-    background: rgba(255, 255, 255, 0.6) !important;  /* Separuh transparent */
-    backdrop-filter: blur(8px) !important;
-    -webkit-backdrop-filter: blur(8px) !important;
-    padding: 10px 24px !important;
-    border-bottom: 1px solid rgba(201, 168, 76, 0.2) !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 12px !important;
-    box-shadow: none !important;
-}
-
-/* ===== BUTANG HOME - LATAR EMAS, TEKS GELAP ===== */
-.home-btn {
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 6px !important;
-    background: var(--gradient-gold) !important;
-    color: #1a1a2e !important;   /* TEKS GELAP */
-    border: none !important;
-    padding: 8px 20px !important;
-    border-radius: 24px !important;
-    font-size: 14px !important;
-    font-weight: 700 !important;
-    cursor: pointer !important;
-    text-decoration: none !important;
-    font-family: inherit !important;
-    transition: all 0.2s !important;
-    box-shadow: 0 2px 8px var(--shadow-gold) !important;
-}
-
-.home-btn:hover {
-    transform: scale(1.04) !important;
-    box-shadow: 0 4px 16px var(--shadow-gold) !important;
-    background: #E8D5A5 !important;
-    color: #1a1a2e !important;
-}
-
-.home-bar .hint {
-    font-size: 13px !important;
-    color: #4a4a5a !important;   /* Gelap, bukan putih */
-    font-weight: 500 !important;
-}
-
-/* ===== PADDING ATAS UNTUK HOME BAR ===== */
-body {
-    padding-top: 70px !important;
-    min-height: 100vh;
-}
-
-/* ===== DARK MODE - TETAPKAN HOME BAR TRANSPARENT ===== */
-@media (prefers-color-scheme: dark) {
-    .home-bar {
-        background: rgba(20, 20, 30, 0.7) !important;
-        border-bottom-color: rgba(201, 168, 76, 0.2) !important;
-    }
-    .home-btn {
-        background: var(--gradient-gold) !important;
-        color: #1a1a2e !important;
-    }
-    .home-btn:hover {
-        background: #E8D5A5 !important;
-        color: #1a1a2e !important;
-    }
-    .home-bar .hint {
-        color: #d0c8b8 !important;
-    }
 }
 
 /* ===== ELEMEN LAIN (GOLD ACCENTS) ===== */
