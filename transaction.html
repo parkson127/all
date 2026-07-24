@@ -1079,277 +1079,262 @@
         // EXPORT EXCEL - WITH 6 SHEETS
         // ============================================================
 
-        function exportExcel() {
-            if (csvData.length === 0) { showError('No data to export! Process first.'); return; }
-            catJumpTo('btnExportExcel');
-            updateCat('⏳', '🐾 Menyediakan Excel...', '🐱', '📊 Exporting...');
-            if (Object.keys(staffMap).length > 0) matchStaffNames();
+        
+                function exportExcel() {
+    if (csvData.length === 0) { showError('No data to export! Process first.'); return; }
+    catJumpTo('btnExportExcel');
+    updateCat('⏳', '🐾 Menyediakan Excel...', '🐱', '📊 Exporting...');
+    if (Object.keys(staffMap).length > 0) matchStaffNames();
 
-            try {
-                var wb = XLSX.utils.book_new();
+    try {
+        // ============================================================
+        // RULE: Exclude POS '001' dari semua sheet EXCEPT Raw Data
+        // ============================================================
+        var filteredData = allRawData.filter(function(d) { return d.pos !== '001'; });
 
-                // ==========================================
-                // SHEET 1: Staff Dashboard
-                // ==========================================
-                var staffData = {};
-                for (var i = 0; i < allRawData.length; i++) {
-                    var d = allRawData[i];
-                    var sid = d.staffId || 'Unknown';
-                    if (!staffData[sid]) { staffData[sid] = { total: 0, bonus: 0, parkson: 0, both: 0, name: d
-                                .staffName || '' }; }
-                    staffData[sid].total++;
-                    if (d.hasBonus) staffData[sid].bonus++;
-                    if (d.hasParkson) staffData[sid].parkson++;
-                    if (d.hasBonus && d.hasParkson) staffData[sid].both++;
-                    if (d.staffName) staffData[sid].name = d.staffName;
-                }
-                var staffRows = [
-                    ['#', 'Staff ID', 'Staff Name', 'Total', 'Bonuslink', 'Parkson', 'Both', '% Parkson']
-                ];
-                var sorted = Object.keys(staffData).sort(function(a, b) { return staffData[b].total - staffData[a]
-                        .total; });
-                var rank = 0;
-                for (var s = 0; s < sorted.length; s++) {
-                    var d2 = staffData[sorted[s]];
-                    rank++;
-                    var pct = d2.total > 0 ? roundPct((d2.parkson / d2.total) * 100) : 0;
-                    staffRows.push([rank, sorted[s], d2.name, d2.total, d2.bonus, d2.parkson, d2.both, pct + '%']);
-                }
-                var totalBonus = 0,
-                    totalParkson = 0,
-                    totalBoth = 0;
-                for (var s2 = 0; s2 < sorted.length; s2++) {
-                    var d3 = staffData[sorted[s2]];
-                    totalBonus += d3.bonus;
-                    totalParkson += d3.parkson;
-                    totalBoth += d3.both;
-                }
-                var overallPct = allRawData.length > 0 ? roundPct((totalParkson / allRawData.length) * 100) : 0;
-                staffRows.push(['TOTAL', '', '', allRawData.length, totalBonus, totalParkson, totalBoth, overallPct +
-                    '%'
-                ]);
-                var ws1 = XLSX.utils.aoa_to_sheet(staffRows);
-                ws1['!cols'] = [{ wch: 6 }, { wch: 15 }, { wch: 25 }, { wch: 10 }, { wch: 12 }, { wch: 12 }, { wch: 10 },
-                    { wch: 12 }
-                ];
-                XLSX.utils.book_append_sheet(wb, ws1, 'Staff Dashboard');
+        var wb = XLSX.utils.book_new();
 
-                // ==========================================
-                // SHEET 2: SWAP Parkson
-                // ==========================================
-                var posData = {};
-                for (var i2 = 0; i2 < allRawData.length; i2++) {
-                    var d4 = allRawData[i2];
-                    var pos = d4.pos || 'Unknown';
-                    if (!posData[pos]) { posData[pos] = { total: 0, swap: 0, noSwap: 0, dates: [] }; }
-                    posData[pos].total++;
-                    if (d4.hasParkson) posData[pos].swap++;
-                    else posData[pos].noSwap++;
-                    if (d4.date && posData[pos].dates.indexOf(d4.date) === -1) posData[pos].dates.push(d4.date);
-                }
-                var posKeys = Object.keys(posData);
-                var swapRows = [
-                    ['RANK', 'POS', 'RANGE DATE', 'TOTAL (SWAP)']
-                ];
-                var swapList = [];
-                for (var p = 0; p < posKeys.length; p++) {
-                    var d5 = posData[posKeys[p]];
-                    if (d5.swap > 0) {
-                        var range = d5.dates.length > 0 ? d5.dates.sort()[0] + ' - ' + d5.dates.sort()[d5.dates
-                            .length - 1] : '';
-                        swapList.push({ pos: posKeys[p], count: d5.swap, range: range });
-                    }
-                }
-                swapList.sort(function(a, b) { return b.count - a.count; });
-                var rank2 = 0;
-                for (var s3 = 0; s3 < swapList.length; s3++) { rank2++;
-                    swapRows.push([rank2, swapList[s3].pos, swapList[s3].range, swapList[s3].count]); }
-                var totalSwap = 0;
-                for (var s4 = 0; s4 < swapList.length; s4++) totalSwap += swapList[s4].count;
-                swapRows.push(['TOTAL', '', '', totalSwap]);
-                var ws2 = XLSX.utils.aoa_to_sheet(swapRows);
-                ws2['!cols'] = [{ wch: 8 }, { wch: 15 }, { wch: 25 }, { wch: 12 }];
-                XLSX.utils.book_append_sheet(wb, ws2, 'SWAP Parkson');
+        // ==========================================
+        // SHEET 1: Staff Dashboard
+        // ==========================================
+        var staffData = {};
+        for (var i = 0; i < filteredData.length; i++) {
+            var d = filteredData[i];
+            var sid = d.staffId || 'Unknown';
+            if (!staffData[sid]) { staffData[sid] = { total: 0, bonus: 0, parkson: 0, both: 0, name: d.staffName || '' }; }
+            staffData[sid].total++;
+            if (d.hasBonus) staffData[sid].bonus++;
+            if (d.hasParkson) staffData[sid].parkson++;
+            if (d.hasBonus && d.hasParkson) staffData[sid].both++;
+            if (d.staffName) staffData[sid].name = d.staffName;
+        }
+        var staffRows = [
+            ['#', 'Staff ID', 'Staff Name', 'Total', 'Bonuslink', '% Bonuslink', 'Parkson', '% Parkson', 'Both']
+        ];
+        var sorted = Object.keys(staffData).sort(function(a, b) { return staffData[b].total - staffData[a].total; });
+        var rank = 0;
+        for (var s = 0; s < sorted.length; s++) {
+            var d2 = staffData[sorted[s]];
+            rank++;
+            var pctBonus = d2.total > 0 ? roundPct((d2.bonus / d2.total) * 100) : 0;
+            var pctParkson = d2.total > 0 ? roundPct((d2.parkson / d2.total) * 100) : 0;
+            staffRows.push([rank, sorted[s], d2.name, d2.total, d2.bonus, pctBonus + '%', d2.parkson, pctParkson + '%', d2.both]);
+        }
+        var totalBonus = 0, totalParkson = 0, totalBoth = 0;
+        for (var s2 = 0; s2 < sorted.length; s2++) {
+            var d3 = staffData[sorted[s2]];
+            totalBonus += d3.bonus;
+            totalParkson += d3.parkson;
+            totalBoth += d3.both;
+        }
+        var overallPctBonus = filteredData.length > 0 ? roundPct((totalBonus / filteredData.length) * 100) : 0;
+        var overallPctParkson = filteredData.length > 0 ? roundPct((totalParkson / filteredData.length) * 100) : 0;
+        staffRows.push(['TOTAL', '', '', filteredData.length, totalBonus, overallPctBonus + '%', totalParkson, overallPctParkson + '%', totalBoth]);
 
-                // ==========================================
-                // SHEET 3: NOT SWAP
-                // ==========================================
-                var noSwapRows = [
-                    ['RANK', 'POS', 'RANGE DATE', 'TOTAL (NOT SWAP)']
-                ];
-                var noSwapList = [];
-                for (var p2 = 0; p2 < posKeys.length; p2++) {
-                    var d6 = posData[posKeys[p2]];
-                    if (d6.noSwap > 0) {
-                        var range2 = d6.dates.length > 0 ? d6.dates.sort()[0] + ' - ' + d6.dates.sort()[d6.dates
-                            .length - 1] : '';
-                        noSwapList.push({ pos: posKeys[p2], count: d6.noSwap, range: range2 });
-                    }
-                }
-                noSwapList.sort(function(a, b) { return b.count - a.count; });
-                var rank3 = 0;
-                for (var s5 = 0; s5 < noSwapList.length; s5++) { rank3++;
-                    noSwapRows.push([rank3, noSwapList[s5].pos, noSwapList[s5].range, noSwapList[s5].count]); }
-                var totalNoSwap = 0;
-                for (var s6 = 0; s6 < noSwapList.length; s6++) totalNoSwap += noSwapList[s6].count;
-                noSwapRows.push(['TOTAL', '', '', totalNoSwap]);
-                var ws3 = XLSX.utils.aoa_to_sheet(noSwapRows);
-                ws3['!cols'] = [{ wch: 8 }, { wch: 15 }, { wch: 25 }, { wch: 12 }];
-                XLSX.utils.book_append_sheet(wb, ws3, 'NOT SWAP Parkson');
+        var ws1 = XLSX.utils.aoa_to_sheet(staffRows);
+        ws1['!cols'] = [{ wch: 6 }, { wch: 15 }, { wch: 25 }, { wch: 10 }, { wch: 12 }, { wch: 12 }, { wch: 12 }, { wch: 12 }, { wch: 10 }];
+        XLSX.utils.book_append_sheet(wb, ws1, 'Staff Dashboard');
 
-                // ==========================================
-                // SHEET 4: POS Tabulation
-                // ==========================================
-                var tabRows = [
-                    ['RANK', 'POS', 'RANGE DATE', 'TOTAL', 'BONUSLINK', 'PARKSON', 'BOTH', '% PARKSON']
-                ];
-                var tabList = [];
-                for (var p3 = 0; p3 < posKeys.length; p3++) {
-                    var d7 = posData[posKeys[p3]];
-                    var range3 = d7.dates.length > 0 ? d7.dates.sort()[0] + ' - ' + d7.dates.sort()[d7.dates.length -
-                        1] : '';
-                    var bonusCount = 0;
-                    for (var i3 = 0; i3 < allRawData.length; i3++) {
-                        if (allRawData[i3].pos === posKeys[p3] && allRawData[i3].hasBonus) bonusCount++;
-                    }
-                    var bothCount = 0;
-                    for (var i4 = 0; i4 < allRawData.length; i4++) {
-                        if (allRawData[i4].pos === posKeys[p3] && allRawData[i4].hasBonus && allRawData[i4]
-                            .hasParkson) bothCount++;
-                    }
-                    var pctPos = d7.total > 0 ? roundPct((d7.swap / d7.total) * 100) : 0;
-                    tabList.push({
-                        pos: posKeys[p3],
-                        total: d7.total,
-                        bonus: bonusCount,
-                        parkson: d7.swap,
-                        both: bothCount,
-                        pct: pctPos,
-                        range: range3
-                    });
-                }
-                tabList.sort(function(a, b) { return b.total - a.total; });
-                var rank4 = 0;
-                for (var s7 = 0; s7 < tabList.length; s7++) {
-                    rank4++;
-                    tabRows.push([rank4, tabList[s7].pos, tabList[s7].range, tabList[s7].total, tabList[s7].bonus,
-                        tabList[s7].parkson, tabList[s7].both, tabList[s7].pct + '%'
-                    ]);
-                }
-                var totalAll = 0,
-                    totalBonusAll = 0,
-                    totalParksonAll2 = 0,
-                    totalBothAll = 0;
-                for (var s8 = 0; s8 < tabList.length; s8++) {
-                    totalAll += tabList[s8].total;
-                    totalBonusAll += tabList[s8].bonus;
-                    totalParksonAll2 += tabList[s8].parkson;
-                    totalBothAll += tabList[s8].both;
-                }
-                var overallPctPos = totalAll > 0 ? roundPct((totalParksonAll2 / totalAll) * 100) : 0;
-                tabRows.push(['TOTAL', '', '', totalAll, totalBonusAll, totalParksonAll2, totalBothAll, overallPctPos +
-                    '%'
-                ]);
-                var ws4 = XLSX.utils.aoa_to_sheet(tabRows);
-                ws4['!cols'] = [{ wch: 8 }, { wch: 15 }, { wch: 25 }, { wch: 10 }, { wch: 12 }, { wch: 12 }, { wch: 10 },
-                    { wch: 12 }
-                ];
-                XLSX.utils.book_append_sheet(wb, ws4, 'POS Tabulation');
-
-                // ==========================================
-                // SHEET 5: Raw Data
-                var rawRows = [headers];
-                for (var r = 0; r < csvData.length; r++) {
-                    rawRows.push(csvData[r]);
-                }
-                var ws5 = XLSX.utils.aoa_to_sheet(rawRows);
-                // Set semua column ke text format dan parksoncard ke text
-                ws5['!cols'] = headers.map(function(h, idx) {
-                    var col = { wch: 14 };
-                    // Column 10 = parksoncard (index 10)
-                    if (idx === 10) {
-                        col.numFmt = '@'; // Text format
-                    }
-                    return col;
-                });
-                XLSX.utils.book_append_sheet(wb, ws5, 'Raw Data');
-
-                // ==========================================
-                // SHEET 6: POS by Cashier by Date
-                // ==========================================
-                var posCashierDate = {};
-                for (var i5 = 0; i5 < allRawData.length; i5++) {
-                    var d8 = allRawData[i5];
-                    var key = d8.date + '|' + d8.pos + '|' + d8.staffId;
-                    if (!posCashierDate[key]) {
-                        posCashierDate[key] = {
-                            date: d8.date,
-                            pos: d8.pos,
-                            staffId: d8.staffId,
-                            staffName: d8.staffName || '',
-                            total: 0,
-                            swap: 0,
-                            noSwap: 0
-                        };
-                    }
-                    posCashierDate[key].total++;
-                    if (d8.hasParkson) posCashierDate[key].swap++;
-                    else posCashierDate[key].noSwap++;
-                    if (d8.staffName) posCashierDate[key].staffName = d8.staffName;
-                }
-
-                var pcdRows = [
-                    ['DATE', 'POS', 'STAFF ID', 'STAFF NAME', 'TOTAL TRANS', 'SWAP (PC)', 'NOT SWAP', '% SWAP']
-                ];
-                var pcdList = Object.keys(posCashierDate).map(function(k) { return posCashierDate[k]; });
-                pcdList.sort(function(a, b) {
-                    var dateCompare = a.date.localeCompare(b.date);
-                    if (dateCompare !== 0) return dateCompare;
-                    var posCompare = a.pos.localeCompare(b.pos);
-                    if (posCompare !== 0) return posCompare;
-                    return a.staffId.localeCompare(b.staffId);
-                });
-
-                for (var s9 = 0; s9 < pcdList.length; s9++) {
-                    var d9 = pcdList[s9];
-                    var pctPcd = d9.total > 0 ? roundPct((d9.swap / d9.total) * 100) : 0;
-                    pcdRows.push([d9.date, d9.pos, d9.staffId, d9.staffName, d9.total, d9.swap, d9.noSwap, pctPcd + '%']);
-                }
-                // Total row
-                var totalTrans = 0,
-                    totalSwapPcd = 0,
-                    totalNoSwapPcd = 0;
-                for (var s10 = 0; s10 < pcdList.length; s10++) {
-                    totalTrans += pcdList[s10].total;
-                    totalSwapPcd += pcdList[s10].swap;
-                    totalNoSwapPcd += pcdList[s10].noSwap;
-                }
-                var overallPctPcd = totalTrans > 0 ? roundPct((totalSwapPcd / totalTrans) * 100) : 0;
-                pcdRows.push(['TOTAL', '', '', '', totalTrans, totalSwapPcd, totalNoSwapPcd, overallPctPcd + '%']);
-
-                var ws6 = XLSX.utils.aoa_to_sheet(pcdRows);
-                ws6['!cols'] = [{ wch: 14 }, { wch: 10 }, { wch: 15 }, { wch: 25 }, { wch: 12 }, { wch: 12 }, { wch: 12 },
-                    { wch: 10 }
-                ];
-                XLSX.utils.book_append_sheet(wb, ws6, 'POS by Cashier by Date');
-
-                var now = new Date();
-                var dateStr = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now
-                    .getDate()).padStart(2, '0');
-                var filename = 'POS_Report_' + dateStr + '.xlsx';
-
-                XLSX.writeFile(wb, filename);
-
-                catCatchFish();
-                updateCat('🎉', '🐾 Excel exported! 6 sheets', '😸', '📊 Export Excel ✅');
-                showSuccess('📊 Excel exported: ' + filename + ' (6 sheets) 🏖️🐱');
-
-            } catch (e) {
-                showError('Export error: ' + e.message);
-                console.error(e);
-                updateCat('😺', '🐾 Error exporting: ' + e.message, '🐱', '❌ Error');
+        // ==========================================
+        // SHEET 2: SWAP Parkson
+        // ==========================================
+        var posData = {};
+        for (var i2 = 0; i2 < filteredData.length; i2++) {
+            var d4 = filteredData[i2];
+            var pos = d4.pos || 'Unknown';
+            if (!posData[pos]) { posData[pos] = { total: 0, swap: 0, noSwap: 0, dates: [] }; }
+            posData[pos].total++;
+            if (d4.hasParkson) posData[pos].swap++;
+            else posData[pos].noSwap++;
+            if (d4.date && posData[pos].dates.indexOf(d4.date) === -1) posData[pos].dates.push(d4.date);
+        }
+        var posKeys = Object.keys(posData);
+        var swapRows = [['RANK', 'POS', 'RANGE DATE', 'TOTAL (SWAP)']];
+        var swapList = [];
+        for (var p = 0; p < posKeys.length; p++) {
+            var d5 = posData[posKeys[p]];
+            if (d5.swap > 0) {
+                var range = d5.dates.length > 0 ? d5.dates.sort()[0] + ' - ' + d5.dates.sort()[d5.dates.length - 1] : '';
+                swapList.push({ pos: posKeys[p], count: d5.swap, range: range });
             }
         }
+        swapList.sort(function(a, b) { return b.count - a.count; });
+        var rank2 = 0;
+        for (var s3 = 0; s3 < swapList.length; s3++) { rank2++;
+            swapRows.push([rank2, swapList[s3].pos, swapList[s3].range, swapList[s3].count]); }
+        var totalSwap = 0;
+        for (var s4 = 0; s4 < swapList.length; s4++) totalSwap += swapList[s4].count;
+        swapRows.push(['TOTAL', '', '', totalSwap]);
+        var ws2 = XLSX.utils.aoa_to_sheet(swapRows);
+        ws2['!cols'] = [{ wch: 8 }, { wch: 15 }, { wch: 25 }, { wch: 12 }];
+        XLSX.utils.book_append_sheet(wb, ws2, 'SWAP Parkson');
+
+        // ==========================================
+        // SHEET 3: NOT SWAP
+        // ==========================================
+        var noSwapRows = [['RANK', 'POS', 'RANGE DATE', 'TOTAL (NOT SWAP)']];
+        var noSwapList = [];
+        for (var p2 = 0; p2 < posKeys.length; p2++) {
+            var d6 = posData[posKeys[p2]];
+            if (d6.noSwap > 0) {
+                var range2 = d6.dates.length > 0 ? d6.dates.sort()[0] + ' - ' + d6.dates.sort()[d6.dates.length - 1] : '';
+                noSwapList.push({ pos: posKeys[p2], count: d6.noSwap, range: range2 });
+            }
+        }
+        noSwapList.sort(function(a, b) { return b.count - a.count; });
+        var rank3 = 0;
+        for (var s5 = 0; s5 < noSwapList.length; s5++) { rank3++;
+            noSwapRows.push([rank3, noSwapList[s5].pos, noSwapList[s5].range, noSwapList[s5].count]); }
+        var totalNoSwap = 0;
+        for (var s6 = 0; s6 < noSwapList.length; s6++) totalNoSwap += noSwapList[s6].count;
+        noSwapRows.push(['TOTAL', '', '', totalNoSwap]);
+        var ws3 = XLSX.utils.aoa_to_sheet(noSwapRows);
+        ws3['!cols'] = [{ wch: 8 }, { wch: 15 }, { wch: 25 }, { wch: 12 }];
+        XLSX.utils.book_append_sheet(wb, ws3, 'NOT SWAP Parkson');
+
+        // ==========================================
+        // SHEET 4: POS Tabulation
+        // ==========================================
+        var tabRows = [
+            ['RANK', 'POS', 'RANGE DATE', 'TOTAL', 'BONUSLINK', '% BONUSLINK', 'PARKSON', '% PARKSON', 'BOTH']
+        ];
+        var tabList = [];
+        for (var p3 = 0; p3 < posKeys.length; p3++) {
+            var d7 = posData[posKeys[p3]];
+            var range3 = d7.dates.length > 0 ? d7.dates.sort()[0] + ' - ' + d7.dates.sort()[d7.dates.length - 1] : '';
+            var bonusCount = 0;
+            for (var i3 = 0; i3 < filteredData.length; i3++) {
+                if (filteredData[i3].pos === posKeys[p3] && filteredData[i3].hasBonus) bonusCount++;
+            }
+            var bothCount = 0;
+            for (var i4 = 0; i4 < filteredData.length; i4++) {
+                if (filteredData[i4].pos === posKeys[p3] && filteredData[i4].hasBonus && filteredData[i4].hasParkson) bothCount++;
+            }
+            var pctBonusPos = d7.total > 0 ? roundPct((bonusCount / d7.total) * 100) : 0;
+            var pctParksonPos = d7.total > 0 ? roundPct((d7.swap / d7.total) * 100) : 0;
+            tabList.push({
+                pos: posKeys[p3],
+                total: d7.total,
+                bonus: bonusCount,
+                parkson: d7.swap,
+                both: bothCount,
+                pctBonus: pctBonusPos,
+                pctParkson: pctParksonPos,
+                range: range3
+            });
+        }
+        tabList.sort(function(a, b) { return b.total - a.total; });
+        var rank4 = 0;
+        for (var s7 = 0; s7 < tabList.length; s7++) {
+            rank4++;
+            tabRows.push([rank4, tabList[s7].pos, tabList[s7].range, tabList[s7].total, tabList[s7].bonus, tabList[s7].pctBonus + '%',
+                tabList[s7].parkson, tabList[s7].pctParkson + '%', tabList[s7].both
+            ]);
+        }
+        var totalAll = 0, totalBonusAll = 0, totalParksonAll2 = 0, totalBothAll = 0;
+        for (var s8 = 0; s8 < tabList.length; s8++) {
+            totalAll += tabList[s8].total;
+            totalBonusAll += tabList[s8].bonus;
+            totalParksonAll2 += tabList[s8].parkson;
+            totalBothAll += tabList[s8].both;
+        }
+        var overallPctBonusPos = totalAll > 0 ? roundPct((totalBonusAll / totalAll) * 100) : 0;
+        var overallPctParksonPos = totalAll > 0 ? roundPct((totalParksonAll2 / totalAll) * 100) : 0;
+        tabRows.push(['TOTAL', '', '', totalAll, totalBonusAll, overallPctBonusPos + '%', totalParksonAll2, overallPctParksonPos + '%', totalBothAll]);
+        var ws4 = XLSX.utils.aoa_to_sheet(tabRows);
+        ws4['!cols'] = [{ wch: 8 }, { wch: 15 }, { wch: 25 }, { wch: 10 }, { wch: 12 }, { wch: 12 }, { wch: 12 }, { wch: 12 }, { wch: 10 }];
+        XLSX.utils.book_append_sheet(wb, ws4, 'POS Tabulation');
+
+        // ==========================================
+        // SHEET 5: Raw Data
+        // ==========================================
+        var rawRows = [headers];
+        for (var r = 0; r < csvData.length; r++) {
+            rawRows.push(csvData[r]);
+        }
+        var ws5 = XLSX.utils.aoa_to_sheet(rawRows);
+        ws5['!cols'] = headers.map(function(h, idx) {
+            var col = { wch: 14 };
+            if (idx === 10) { col.numFmt = '@'; }
+            return col;
+        });
+        XLSX.utils.book_append_sheet(wb, ws5, 'Raw Data');
+
+        // ==========================================
+        // SHEET 6: POS by Cashier by Date
+        // ==========================================
+        var posCashierDate = {};
+        for (var i5 = 0; i5 < filteredData.length; i5++) {
+            var d8 = filteredData[i5];
+            var key = d8.date + '|' + d8.pos + '|' + d8.staffId;
+            if (!posCashierDate[key]) {
+                posCashierDate[key] = {
+                    date: d8.date,
+                    pos: d8.pos,
+                    staffId: d8.staffId,
+                    staffName: d8.staffName || '',
+                    total: 0,
+                    bonus: 0,
+                    swap: 0,
+                    noSwap: 0
+                };
+            }
+            posCashierDate[key].total++;
+            if (d8.hasBonus) posCashierDate[key].bonus++;
+            if (d8.hasParkson) posCashierDate[key].swap++;
+            else posCashierDate[key].noSwap++;
+            if (d8.staffName) posCashierDate[key].staffName = d8.staffName;
+        }
+
+        var pcdRows = [
+            ['DATE', 'POS', 'STAFF ID', 'STAFF NAME', 'TOTAL TRANS', 'BONUSLINK', '% BONUSLINK', 'SWAP (PC)', 'NOT SWAP', '% SWAP']
+        ];
+        var pcdList = Object.keys(posCashierDate).map(function(k) { return posCashierDate[k]; });
+        pcdList.sort(function(a, b) {
+            var dateCompare = a.date.localeCompare(b.date);
+            if (dateCompare !== 0) return dateCompare;
+            var posCompare = a.pos.localeCompare(b.pos);
+            if (posCompare !== 0) return posCompare;
+            return a.staffId.localeCompare(b.staffId);
+        });
+
+        for (var s9 = 0; s9 < pcdList.length; s9++) {
+            var d9 = pcdList[s9];
+            var pctBonusPcd = d9.total > 0 ? roundPct((d9.bonus / d9.total) * 100) : 0;
+            var pctSwapPcd = d9.total > 0 ? roundPct((d9.swap / d9.total) * 100) : 0;
+            pcdRows.push([d9.date, d9.pos, d9.staffId, d9.staffName, d9.total, d9.bonus, pctBonusPcd + '%', d9.swap, d9.noSwap, pctSwapPcd + '%']);
+        }
+        var totalTransPcd = 0, totalBonusPcd = 0, totalSwapPcd = 0, totalNoSwapPcd = 0;
+        for (var s10 = 0; s10 < pcdList.length; s10++) {
+            totalTransPcd += pcdList[s10].total;
+            totalBonusPcd += pcdList[s10].bonus;
+            totalSwapPcd += pcdList[s10].swap;
+            totalNoSwapPcd += pcdList[s10].noSwap;
+        }
+        var overallPctBonusPcd = totalTransPcd > 0 ? roundPct((totalBonusPcd / totalTransPcd) * 100) : 0;
+        var overallPctSwapPcd = totalTransPcd > 0 ? roundPct((totalSwapPcd / totalTransPcd) * 100) : 0;
+        pcdRows.push(['TOTAL', '', '', '', totalTransPcd, totalBonusPcd, overallPctBonusPcd + '%', totalSwapPcd, totalNoSwapPcd, overallPctSwapPcd + '%']);
+
+        var ws6 = XLSX.utils.aoa_to_sheet(pcdRows);
+        ws6['!cols'] = [{ wch: 14 }, { wch: 10 }, { wch: 15 }, { wch: 25 }, { wch: 12 }, { wch: 12 }, { wch: 12 }, { wch: 12 }, { wch: 12 }, { wch: 12 }];
+        XLSX.utils.book_append_sheet(wb, ws6, 'POS by Cashier by Date');
+
+        var now = new Date();
+        var dateStr = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+        var filename = 'POS_Report_' + dateStr + '.xlsx';
+
+        XLSX.writeFile(wb, filename);
+
+        catCatchFish();
+        updateCat('🎉', '🐾 Excel exported! 6 sheets', '😸', '📊 Export Excel ✅');
+        showSuccess('📊 Excel exported: ' + filename + ' (6 sheets) 🏖️🐱');
+
+    } catch (e) {
+        showError('Export error: ' + e.message);
+        console.error(e);
+        updateCat('😺', '🐾 Error exporting: ' + e.message, '🐱', '❌ Error');
+    }
+}
 
         // ============================================================
         // SAMPLE DATA
