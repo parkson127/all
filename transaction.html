@@ -1109,7 +1109,7 @@
             if (d.staffName) staffData[sid].name = d.staffName;
         }
         var staffRows = [
-            ['#', 'Staff ID', 'Staff Name', 'Total', 'Bonuslink', '% Bonuslink', 'Parkson', '% Parkson', 'Both']
+            ['#', 'Staff ID', 'Staff Name', 'Total', 'Parkson', 'Bonuslink', 'Both', '% Parkson', '% Bonuslink']
         ];
         var sorted = Object.keys(staffData).sort(function(a, b) { return staffData[b].total - staffData[a].total; });
         var rank = 0;
@@ -1149,7 +1149,7 @@
             if (d4.date && posData[pos].dates.indexOf(d4.date) === -1) posData[pos].dates.push(d4.date);
         }
         var posKeys = Object.keys(posData);
-        var swapRows = [['RANK', 'POS', 'RANGE DATE', 'TOTAL (SWAP)']];
+        var swapRows = [['RANK', 'POS', 'RANGE DATE', 'TOTAL (SWAP PC)']];
         var swapList = [];
         for (var p = 0; p < posKeys.length; p++) {
             var d5 = posData[posKeys[p]];
@@ -1172,7 +1172,7 @@
         // ==========================================
         // SHEET 3: NOT SWAP
         // ==========================================
-        var noSwapRows = [['RANK', 'POS', 'RANGE DATE', 'TOTAL (NOT SWAP)']];
+        var noSwapRows = [['RANK', 'POS', 'RANGE DATE', 'TOTAL (NOT SWAP PC)']];
         var noSwapList = [];
         for (var p2 = 0; p2 < posKeys.length; p2++) {
             var d6 = posData[posKeys[p2]];
@@ -1196,7 +1196,7 @@
         // SHEET 4: POS Tabulation
         // ==========================================
         var tabRows = [
-            ['RANK', 'POS', 'RANGE DATE', 'TOTAL', 'BONUSLINK', '% BONUSLINK', 'PARKSON', '% PARKSON', 'BOTH']
+            ['RANK', 'POS', 'RANGE DATE', 'TOTAL', 'PARKSON', 'BONUSLINK', 'BOTH', '% PARKSON', '% BONUSLINK']
         ];
         var tabList = [];
         for (var p3 = 0; p3 < posKeys.length; p3++) {
@@ -1287,7 +1287,7 @@
         }
 
         var pcdRows = [
-            ['DATE', 'POS', 'STAFF ID', 'STAFF NAME', 'TOTAL TRANS', 'BONUSLINK', '% BONUSLINK', 'SWAP (PC)', 'NOT SWAP', '% SWAP']
+            ['DATE', 'POS', 'STAFF ID', 'STAFF NAME', 'TOTAL TRANS', 'SWAP (PC)', 'NOT SWAP (PC)', 'BONUSLINK', '% SWAP (PC)', '% BONUSLINK']
         ];
         var pcdList = Object.keys(posCashierDate).map(function(k) { return posCashierDate[k]; });
         pcdList.sort(function(a, b) {
