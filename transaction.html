@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🐱 Transaction Extractor</title>
+    <title>🐱 PAW Extractor</title>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js">
     </script>
     <style>
@@ -1047,7 +1047,7 @@
         }
 
         // ============================================================
-        // EXPORT EXCEL - WITH 6 SHEETS
+        // EXPORT EXCEL - DENGAN HEADER & DATA BETUL
         // ============================================================
 
         function exportExcel() {
@@ -1071,38 +1071,39 @@
                 for (var i = 0; i < filteredData.length; i++) {
                     var d = filteredData[i];
                     var sid = d.staffId || 'Unknown';
-                    if (!staffData[sid]) { staffData[sid] = { total: 0, bonus: 0, parkson: 0, both: 0, name: d.staffName || '' }; }
+                    if (!staffData[sid]) { staffData[sid] = { total: 0, parkson: 0, bonus: 0, both: 0, name: d.staffName || '' }; }
                     staffData[sid].total++;
-                    if (d.hasBonus) staffData[sid].bonus++;
                     if (d.hasParkson) staffData[sid].parkson++;
+                    if (d.hasBonus) staffData[sid].bonus++;
                     if (d.hasBonus && d.hasParkson) staffData[sid].both++;
                     if (d.staffName) staffData[sid].name = d.staffName;
                 }
+                
                 var staffRows = [
-            ['#', 'Staff ID', 'Staff Name', 'Total', 'Parkson', 'Bonuslink', 'Both', '% Parkson', '% Bonuslink']
-        ];
+                    ['#', 'Staff ID', 'Staff Name', 'Total', 'Parkson', 'Bonuslink', 'Both', '% Parkson', '% Bonuslink']
+                ];
                 var sorted = Object.keys(staffData).sort(function(a, b) { return staffData[b].total - staffData[a].total; });
                 var rank = 0;
                 for (var s = 0; s < sorted.length; s++) {
                     var d2 = staffData[sorted[s]];
                     rank++;
-                    var pctBonus = d2.total > 0 ? roundPct((d2.bonus / d2.total) * 100) : 0;
                     var pctParkson = d2.total > 0 ? roundPct((d2.parkson / d2.total) * 100) : 0;
-                    staffRows.push([rank, sorted[s], d2.name, d2.total, d2.bonus, pctBonus + '%', d2.parkson, pctParkson + '%', d2.both]);
+                    var pctBonus = d2.total > 0 ? roundPct((d2.bonus / d2.total) * 100) : 0;
+                    staffRows.push([rank, sorted[s], d2.name, d2.total, d2.parkson, d2.bonus, d2.both, pctParkson + '%', pctBonus + '%']);
                 }
-                var totalBonus = 0, totalParkson = 0, totalBoth = 0;
+                var totalParkson = 0, totalBonus = 0, totalBoth = 0;
                 for (var s2 = 0; s2 < sorted.length; s2++) {
                     var d3 = staffData[sorted[s2]];
-                    totalBonus += d3.bonus;
                     totalParkson += d3.parkson;
+                    totalBonus += d3.bonus;
                     totalBoth += d3.both;
                 }
-                var overallPctBonus = filteredData.length > 0 ? roundPct((totalBonus / filteredData.length) * 100) : 0;
                 var overallPctParkson = filteredData.length > 0 ? roundPct((totalParkson / filteredData.length) * 100) : 0;
-                staffRows.push(['TOTAL', '', '', filteredData.length, totalBonus, overallPctBonus + '%', totalParkson, overallPctParkson + '%', totalBoth]);
+                var overallPctBonus = filteredData.length > 0 ? roundPct((totalBonus / filteredData.length) * 100) : 0;
+                staffRows.push(['TOTAL', '', '', filteredData.length, totalParkson, totalBonus, totalBoth, overallPctParkson + '%', overallPctBonus + '%']);
 
                 var ws1 = XLSX.utils.aoa_to_sheet(staffRows);
-                ws1['!cols'] = [{ wch: 6 }, { wch: 15 }, { wch: 25 }, { wch: 10 }, { wch: 12 }, { wch: 12 }, { wch: 12 }, { wch: 12 }, { wch: 10 }];
+                ws1['!cols'] = [{ wch: 6 }, { wch: 15 }, { wch: 25 }, { wch: 10 }, { wch: 12 }, { wch: 12 }, { wch: 10 }, { wch: 12 }, { wch: 12 }];
                 XLSX.utils.book_append_sheet(wb, ws1, 'Staff Dashboard');
 
                 // ==========================================
@@ -1119,7 +1120,8 @@
                     if (d4.date && posData[pos].dates.indexOf(d4.date) === -1) posData[pos].dates.push(d4.date);
                 }
                 var posKeys = Object.keys(posData);
-                 var swapRows = [['RANK', 'POS', 'RANGE DATE', 'TOTAL (SWAP PC)']];
+                
+                var swapRows = [['RANK', 'POS', 'RANGE DATE', 'TOTAL (SWAP PC)']];
                 var swapList = [];
                 for (var p = 0; p < posKeys.length; p++) {
                     var d5 = posData[posKeys[p]];
@@ -1165,13 +1167,14 @@
                 // ==========================================
                 // SHEET 4: POS Tabulation
                 // ==========================================
-                 var tabRows = [
-            ['RANK', 'POS', 'RANGE DATE', 'TOTAL', 'PARKSON', 'BONUSLINK', 'BOTH', '% PARKSON', '% BONUSLINK']
-        ];
+                var tabRows = [
+                    ['RANK', 'POS', 'RANGE DATE', 'TOTAL', 'PARKSON', 'BONUSLINK', 'BOTH', '% PARKSON', '% BONUSLINK']
+                ];
                 var tabList = [];
                 for (var p3 = 0; p3 < posKeys.length; p3++) {
                     var d7 = posData[posKeys[p3]];
                     var range3 = d7.dates.length > 0 ? d7.dates.sort()[0] + ' - ' + d7.dates.sort()[d7.dates.length - 1] : '';
+                    var parksonCount = d7.swap;
                     var bonusCount = 0;
                     for (var i3 = 0; i3 < filteredData.length; i3++) {
                         if (filteredData[i3].pos === posKeys[p3] && filteredData[i3].hasBonus) bonusCount++;
@@ -1180,16 +1183,16 @@
                     for (var i4 = 0; i4 < filteredData.length; i4++) {
                         if (filteredData[i4].pos === posKeys[p3] && filteredData[i4].hasBonus && filteredData[i4].hasParkson) bothCount++;
                     }
+                    var pctParksonPos = d7.total > 0 ? roundPct((parksonCount / d7.total) * 100) : 0;
                     var pctBonusPos = d7.total > 0 ? roundPct((bonusCount / d7.total) * 100) : 0;
-                    var pctParksonPos = d7.total > 0 ? roundPct((d7.swap / d7.total) * 100) : 0;
                     tabList.push({
                         pos: posKeys[p3],
                         total: d7.total,
+                        parkson: parksonCount,
                         bonus: bonusCount,
-                        parkson: d7.swap,
                         both: bothCount,
-                        pctBonus: pctBonusPos,
                         pctParkson: pctParksonPos,
+                        pctBonus: pctBonusPos,
                         range: range3
                     });
                 }
@@ -1197,22 +1200,20 @@
                 var rank4 = 0;
                 for (var s7 = 0; s7 < tabList.length; s7++) {
                     rank4++;
-                    tabRows.push([rank4, tabList[s7].pos, tabList[s7].range, tabList[s7].total, tabList[s7].bonus, tabList[s7].pctBonus + '%',
-                        tabList[s7].parkson, tabList[s7].pctParkson + '%', tabList[s7].both
-                    ]);
+                    tabRows.push([rank4, tabList[s7].pos, tabList[s7].range, tabList[s7].total, tabList[s7].parkson, tabList[s7].bonus, tabList[s7].both, tabList[s7].pctParkson + '%', tabList[s7].pctBonus + '%']);
                 }
-                var totalAll = 0, totalBonusAll = 0, totalParksonAll2 = 0, totalBothAll = 0;
+                var totalAll = 0, totalParksonAll2 = 0, totalBonusAll = 0, totalBothAll = 0;
                 for (var s8 = 0; s8 < tabList.length; s8++) {
                     totalAll += tabList[s8].total;
-                    totalBonusAll += tabList[s8].bonus;
                     totalParksonAll2 += tabList[s8].parkson;
+                    totalBonusAll += tabList[s8].bonus;
                     totalBothAll += tabList[s8].both;
                 }
-                var overallPctBonusPos = totalAll > 0 ? roundPct((totalBonusAll / totalAll) * 100) : 0;
                 var overallPctParksonPos = totalAll > 0 ? roundPct((totalParksonAll2 / totalAll) * 100) : 0;
-                tabRows.push(['TOTAL', '', '', totalAll, totalBonusAll, overallPctBonusPos + '%', totalParksonAll2, overallPctParksonPos + '%', totalBothAll]);
+                var overallPctBonusPos = totalAll > 0 ? roundPct((totalBonusAll / totalAll) * 100) : 0;
+                tabRows.push(['TOTAL', '', '', totalAll, totalParksonAll2, totalBonusAll, totalBothAll, overallPctParksonPos + '%', overallPctBonusPos + '%']);
                 var ws4 = XLSX.utils.aoa_to_sheet(tabRows);
-                ws4['!cols'] = [{ wch: 8 }, { wch: 15 }, { wch: 25 }, { wch: 10 }, { wch: 12 }, { wch: 12 }, { wch: 12 }, { wch: 12 }, { wch: 10 }];
+                ws4['!cols'] = [{ wch: 8 }, { wch: 15 }, { wch: 25 }, { wch: 10 }, { wch: 12 }, { wch: 12 }, { wch: 10 }, { wch: 12 }, { wch: 12 }];
                 XLSX.utils.book_append_sheet(wb, ws4, 'POS Tabulation');
 
                 // ==========================================
@@ -1244,21 +1245,21 @@
                             staffId: d8.staffId,
                             staffName: d8.staffName || '',
                             total: 0,
-                            bonus: 0,
                             swap: 0,
-                            noSwap: 0
+                            noSwap: 0,
+                            bonus: 0
                         };
                     }
                     posCashierDate[key].total++;
-                    if (d8.hasBonus) posCashierDate[key].bonus++;
                     if (d8.hasParkson) posCashierDate[key].swap++;
                     else posCashierDate[key].noSwap++;
+                    if (d8.hasBonus) posCashierDate[key].bonus++;
                     if (d8.staffName) posCashierDate[key].staffName = d8.staffName;
                 }
 
                 var pcdRows = [
-            ['DATE', 'POS', 'STAFF ID', 'STAFF NAME', 'TOTAL TRANS', 'SWAP (PC)', 'NOT SWAP (PC)', 'BONUSLINK', '% SWAP (PC)', '% BONUSLINK']
-        ];
+                    ['DATE', 'POS', 'STAFF ID', 'STAFF NAME', 'TOTAL TRANS', 'SWAP (PC)', 'NOT SWAP (PC)', 'BONUSLINK', '% SWAP (PC)', '% BONUSLINK']
+                ];
                 var pcdList = Object.keys(posCashierDate).map(function(k) { return posCashierDate[k]; });
                 pcdList.sort(function(a, b) {
                     var dateCompare = a.date.localeCompare(b.date);
@@ -1270,20 +1271,20 @@
 
                 for (var s9 = 0; s9 < pcdList.length; s9++) {
                     var d9 = pcdList[s9];
-                    var pctBonusPcd = d9.total > 0 ? roundPct((d9.bonus / d9.total) * 100) : 0;
                     var pctSwapPcd = d9.total > 0 ? roundPct((d9.swap / d9.total) * 100) : 0;
-                    pcdRows.push([d9.date, d9.pos, d9.staffId, d9.staffName, d9.total, d9.bonus, pctBonusPcd + '%', d9.swap, d9.noSwap, pctSwapPcd + '%']);
+                    var pctBonusPcd = d9.total > 0 ? roundPct((d9.bonus / d9.total) * 100) : 0;
+                    pcdRows.push([d9.date, d9.pos, d9.staffId, d9.staffName, d9.total, d9.swap, d9.noSwap, d9.bonus, pctSwapPcd + '%', pctBonusPcd + '%']);
                 }
-                var totalTransPcd = 0, totalBonusPcd = 0, totalSwapPcd = 0, totalNoSwapPcd = 0;
+                var totalTransPcd = 0, totalSwapPcd = 0, totalNoSwapPcd = 0, totalBonusPcd = 0;
                 for (var s10 = 0; s10 < pcdList.length; s10++) {
                     totalTransPcd += pcdList[s10].total;
-                    totalBonusPcd += pcdList[s10].bonus;
                     totalSwapPcd += pcdList[s10].swap;
                     totalNoSwapPcd += pcdList[s10].noSwap;
+                    totalBonusPcd += pcdList[s10].bonus;
                 }
-                var overallPctBonusPcd = totalTransPcd > 0 ? roundPct((totalBonusPcd / totalTransPcd) * 100) : 0;
                 var overallPctSwapPcd = totalTransPcd > 0 ? roundPct((totalSwapPcd / totalTransPcd) * 100) : 0;
-                pcdRows.push(['TOTAL', '', '', '', totalTransPcd, totalBonusPcd, overallPctBonusPcd + '%', totalSwapPcd, totalNoSwapPcd, overallPctSwapPcd + '%']);
+                var overallPctBonusPcd = totalTransPcd > 0 ? roundPct((totalBonusPcd / totalTransPcd) * 100) : 0;
+                pcdRows.push(['TOTAL', '', '', '', totalTransPcd, totalSwapPcd, totalNoSwapPcd, totalBonusPcd, overallPctSwapPcd + '%', overallPctBonusPcd + '%']);
 
                 var ws6 = XLSX.utils.aoa_to_sheet(pcdRows);
                 ws6['!cols'] = [{ wch: 14 }, { wch: 10 }, { wch: 15 }, { wch: 25 }, { wch: 12 }, { wch: 12 }, { wch: 12 }, { wch: 12 }, { wch: 12 }, { wch: 12 }];
